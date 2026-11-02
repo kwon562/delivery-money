@@ -238,6 +238,15 @@
     .bar-fill { height:100%; border-radius:99px; background:#13a87b; }
     .bar-fill.coupang { background:#4778df; }
     .analytics-note { color:#888; font-size:12px; margin-top:10px; }
+    .weekday-list { display:grid; gap:12px; margin-top:14px; }
+    .weekday-row { display:grid; grid-template-columns:42px minmax(0,1fr) auto; gap:10px; align-items:center; font-size:13px; }
+    .weekday-track { height:13px; background:#edf0f4; border-radius:99px; overflow:hidden; }
+    .weekday-fill { height:100%; width:0; background:#13a87b; border-radius:99px; transition:width .25s ease; }
+    .weekday-row.best .weekday-fill { background:#f0a52b; }
+    .weekday-meta { color:#777; font-size:11px; margin-top:4px; }
+    .weekday-best { background:#f5fbf8; border:1px solid #dcefe7; border-radius:12px; padding:14px; margin-top:14px; line-height:1.6; }
+    .weekday-best strong { color:#13a87b; }
+
     @media (max-width:750px) {
       .analytics-grid { grid-template-columns:repeat(2,1fr); gap:9px; }
       .analytics-card { padding:14px; }
@@ -378,6 +387,12 @@
         <div class="bar-row"><strong>쿠팡이츠</strong><div class="bar-track"><div class="bar-fill coupang" id="coupangBar" style="width:0%"></div></div><strong id="monthCoupang">0원</strong></div>
       </div>
       <div class="analytics-note">현재 저장된 기록의 월간 합계를 기준으로 계산합니다.</div>
+    </div>
+    <div class="chart-panel">
+      <h3 style="margin:0 0 12px;font-size:16px;">요일별 수익 분석</h3>
+      <div class="analytics-note">저장된 모든 배달 기록을 요일별로 합산합니다. 막대는 순수익 기준입니다.</div>
+      <div class="weekday-list" id="weekdayList"></div>
+      <div class="weekday-best" id="weekdayBest">기록이 쌓이면 가장 효율적인 요일을 분석해 드립니다.</div>
     </div>
   </section>
 
@@ -1022,7 +1037,71 @@
     document.getElementById("monthCoupang").textContent = won(cp);
     document.getElementById("baeminBar").style.width = (bm / max * 100) + "%";
     document.getElementById("coupangBar").style.width = (cp / max * 100) + "%";
+    drawWeekdayAnalysis();
     drawIncomeChart(selected);
+  }
+
+  function drawWeekdayAnalysis() {
+    const list = document.getElementById("weekdayList");
+    const bestBox = document.getElementById("weekdayBest");
+    if (!list || !bestBox) return;
+
+    const names = ["일", "월", "화", "수", "목", "금", "토"];
+    const stats = names.map((name, day) => {
+      const items = records.filter(r => {
+        if (!r.date) return false;
+        return new Date(r.date + "T12:00:00").getDay() === day;
+      });
+      const sum = key => items.reduce((total, r) => total + (Number(r[key]) || 0), 0);
+      const net = sum("net");
+      const hours = sum("hours");
+      return { name, net, orders: sum("orders"), hours, hourly: hours > 0 ? Math.round(net / hours) : 0, count: items.length };
+    });
+
+    const maxNet = Math.max(0, ...stats.map(s => s.net));
+    list.innerHTML = "";
+    stats.forEach(s => {
+      const row = document.createElement("div");
+      row.className = "weekday-row";
+      const label = document.createElement("strong");
+      label.textContent = s.name + "요일";
+      const middle = document.createElement("div");
+      const track = document.createElement("div");
+      track.className = "weekday-track";
+      const fill = document.createElement("div");
+      fill.className = "weekday-fill";
+      fill.style.width = maxNet > 0 ? Math.max(0, s.net) / maxNet * 100 + "%" : "0%";
+      track.appendChild(fill);
+      const meta = document.createElement("div");
+      meta.className = "weekday-meta";
+      meta.textContent = s.orders.toLocaleString("ko-KR") + "건 · " + s.count + "일 기록";
+      middle.append(track, meta);
+      const value = document.createElement("strong");
+      value.textContent = won(s.net);
+      row.append(label, middle, value);
+      list.appendChild(row);
+    });
+
+    const eligible = stats.filter(s => s.hours > 0 && s.count > 0);
+    if (!eligible.length) {
+      bestBox.textContent = "운행 시간을 포함한 기록이 쌓이면 시간당 순수익이 가장 높은 요일을 알려드립니다.";
+      return;
+    }
+    const best = eligible.reduce((a, b) => b.hourly > a.hourly ? b : a);
+    const maxOrders = Math.max(...stats.map(s => s.orders));
+    const busiest = stats.find(s => s.orders === maxOrders && maxOrders > 0);
+    bestBox.innerHTML = "";
+    const title = document.createElement("strong");
+    title.textContent = best.name + "요일";
+    const detail = document.createElement("span");
+    detail.textContent = "이 시간당 순수익이 가장 높습니다. 평균 " + won(best.hourly) + "/시간";
+    bestBox.append(title, document.createElement("br"), detail);
+    if (busiest) {
+      const extra = document.createElement("div");
+      extra.style.marginTop = "5px";
+      extra.textContent = "배달 건수가 가장 많은 요일: " + busiest.name + "요일 (" + busiest.orders + "건)";
+      bestBox.appendChild(extra);
+    }
   }
 
   function drawIncomeChart(selected) {
