@@ -319,6 +319,195 @@
         padding: 17px;
       }
     }
+
+    /* DELIVERY MONEY PREMIUM UI v1 */
+    :root {
+      --dm-ink: #172b4d;
+      --dm-muted: #718096;
+      --dm-green: #0b9b75;
+      --dm-green-dark: #087b60;
+      --dm-line: #e8edf3;
+      --dm-surface: #ffffff;
+      --dm-bg: #f5f7fb;
+      --dm-shadow: 0 10px 30px rgba(25, 42, 70, .055);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      padding: 30px 24px;
+      color: var(--dm-ink);
+      background:
+        radial-gradient(ellipse at 8% 0%, rgba(11,155,117,.07), transparent 32%),
+        var(--dm-bg);
+      font-family: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", sans-serif;
+      letter-spacing: -.025em;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1160px; }
+    header {
+      margin-bottom: 34px;
+      padding: 22px 26px;
+      background: rgba(255,255,255,.88);
+      border: 1px solid rgba(232,237,243,.9);
+      border-radius: 22px;
+      box-shadow: var(--dm-shadow);
+    }
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--dm-ink);
+      font-size: 23px;
+      font-weight: 850;
+      letter-spacing: -.055em;
+    }
+    .logo::before {
+      content: "₩";
+      display: inline-grid;
+      place-items: center;
+      width: 36px; height: 36px;
+      color: #fff;
+      background: linear-gradient(145deg, #16b88b, #087b60);
+      border-radius: 12px;
+      font-size: 20px;
+      box-shadow: 0 5px 12px rgba(11,155,117,.2);
+    }
+    .subtitle { color: var(--dm-muted); margin-top: 7px; font-size: 13px; }
+    .date {
+      padding: 9px 13px;
+      color: #53647a;
+      background: #f4f7fa;
+      border: 1px solid var(--dm-line);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 650;
+    }
+    .section-title {
+      margin: 30px 0 15px;
+      color: var(--dm-ink);
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -.04em;
+    }
+    .dashboard { gap: 14px; }
+    .card, .panel, .history, .auth-panel, .expense-panel,
+    .analytics-card, .chart-panel {
+      background: var(--dm-surface);
+      border: 1px solid var(--dm-line);
+      border-radius: 20px;
+      box-shadow: var(--dm-shadow);
+    }
+    .card {
+      position: relative;
+      min-height: 126px;
+      padding: 22px;
+      overflow: hidden;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .card::after {
+      content: "";
+      position: absolute;
+      right: -24px; bottom: -38px;
+      width: 104px; height: 104px;
+      border-radius: 50%;
+      background: rgba(11,155,117,.055);
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(25,42,70,.09); }
+    .card-label, .analytics-card .label { color: var(--dm-muted); font-size: 12px; font-weight: 650; }
+    .card-value { position: relative; z-index: 1; margin-top: 14px; color: var(--dm-ink); font-size: 25px; font-weight: 850; letter-spacing: -.05em; }
+    .green, .analytics-card .value.green { color: var(--dm-green); }
+    .content-grid { gap: 16px; margin-top: 18px; }
+    .panel, .auth-panel, .history, .expense-panel { padding: 25px; }
+    .panel .section-title, .auth-panel .section-title, .history .section-title, .expense-panel .section-title { margin-top: 0; }
+    label { margin: 17px 0 8px; color: #42536a; font-size: 13px; font-weight: 700; }
+    input, select {
+      min-height: 48px;
+      padding: 13px 14px;
+      color: var(--dm-ink);
+      background: #fbfcfe;
+      border: 1px solid #dfe6ee;
+      border-radius: 12px;
+      font: inherit;
+      font-size: 14px;
+      transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    input::placeholder { color: #a4afbd; }
+    input:focus, select:focus {
+      outline: none;
+      background: #fff;
+      border-color: #36b895;
+      box-shadow: 0 0 0 4px rgba(11,155,117,.10);
+    }
+    button {
+      min-height: 44px;
+      border-radius: 12px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 750;
+      letter-spacing: -.02em;
+      transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
+    }
+    button:hover:not(:disabled) { filter: brightness(.97); transform: translateY(-1px); }
+    button:active:not(:disabled) { transform: translateY(0); }
+    .btn, .login-btn, .csv-btn {
+      color: #fff;
+      background: linear-gradient(135deg, #12ad82, #078565);
+      box-shadow: 0 6px 14px rgba(11,155,117,.16);
+    }
+    .btn { margin-top: 22px; padding: 15px 18px; }
+    .signup-btn, .backup-btn { color: #fff; background: #20334f; }
+    .logout-btn { color: #526176; background: #f0f3f7; }
+    .restore-btn { color: #315d9d; background: #edf4ff; }
+    .auth-status, .sync-status { color: var(--dm-muted); font-size: 12px; }
+    .analytics-section { margin-top: 30px; }
+    .analytics-grid { gap: 12px; }
+    .analytics-card { padding: 18px; box-shadow: none; background: #fbfcfe; }
+    .analytics-card .value { margin-top: 10px; color: var(--dm-ink); font-size: 21px; font-weight: 850; letter-spacing: -.04em; }
+    .chart-panel { margin-top: 14px; padding: 22px; }
+    .chart-panel h3 { color: var(--dm-ink); font-weight: 800; letter-spacing: -.035em; }
+    .analytics-note { color: #8995a5; line-height: 1.65; }
+    .bar-track, .weekday-track { background: #edf2f6; }
+    .bar-fill { background: linear-gradient(90deg, #19bd91, #078565); }
+    .bar-fill.coupang { background: linear-gradient(90deg, #6d91ed, #4778df); }
+    .weekday-fill { background: linear-gradient(90deg, #19bd91, #078565); }
+    .weekday-best { background: #f0faf6; border: 1px solid #d7f0e6; border-radius: 14px; }
+    .expense-total { color: #e16a62; }
+    .expense-add { color: #fff; background: #20334f; }
+    .history { margin-top: 22px; }
+    .tools { gap: 9px; }
+    .tools button { padding: 11px 15px; }
+    table { border-collapse: separate; border-spacing: 0; }
+    th, td { padding: 14px 11px; border-bottom: 1px solid #edf1f5; }
+    th { color: #66768b; background: #f6f8fb; font-weight: 750; }
+    th:first-child { border-radius: 10px 0 0 10px; }
+    th:last-child { border-radius: 0 10px 10px 0; }
+    td { color: #44546a; }
+    .delete-btn { color: #c45c5c; background: #fff1f0; }
+    :focus-visible { outline: 3px solid rgba(54,134,232,.4); outline-offset: 3px; }
+    @media (max-width: 750px) {
+      body { padding: 14px 12px 28px; }
+      header { padding: 18px; margin-bottom: 24px; border-radius: 18px; }
+      .logo { font-size: 20px; }
+      .logo::before { width: 32px; height: 32px; border-radius: 10px; }
+      .date { padding: 7px 10px; }
+      .section-title { margin-top: 25px; font-size: 17px; }
+      .dashboard { gap: 10px; }
+      .card { min-height: 112px; padding: 16px; border-radius: 16px; }
+      .card-value { margin-top: 11px; font-size: 20px; }
+      .content-grid { gap: 12px; }
+      .panel, .auth-panel, .history, .expense-panel { padding: 18px; border-radius: 17px; }
+      .analytics-card { padding: 13px; border-radius: 15px; }
+      .analytics-card .value { font-size: 17px; }
+      .chart-panel { padding: 17px; border-radius: 17px; }
+      .tools button { flex: 1 1 130px; }
+    }
+    @media (max-width: 380px) {
+      body { padding-left: 10px; padding-right: 10px; }
+      .card { padding: 13px; }
+      .card-value { font-size: 18px; }
+      .analytics-card { padding: 11px; }
+      .analytics-card .value { font-size: 15px; }
+    }
+
   </style>
 </head>
 
