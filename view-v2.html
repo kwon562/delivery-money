@@ -1221,12 +1221,25 @@
   // 2. 기본 데이터
   // ==================================
 
-  let records = JSON.parse(
-    localStorage.getItem("deliveryRecords") || "[]"
-  );
-
   let currentUser = null;
+  let records = JSON.parse(localStorage.getItem("deliveryRecords_guest") || "[]");
   let expenseItems = [];
+
+  function getRecordsStorageKey() {
+    return currentUser
+      ? "deliveryRecords_user_" + currentUser.id
+      : "deliveryRecords_guest";
+  }
+
+  function loadLocalRecords() {
+    try {
+      records = JSON.parse(localStorage.getItem(getRecordsStorageKey()) || "[]");
+      if (!Array.isArray(records)) records = [];
+    } catch (error) {
+      console.error("로컬 기록을 불러오지 못했습니다.", error);
+      records = [];
+    }
+  }
 
   const today = new Date();
 
@@ -1244,7 +1257,7 @@
 
   function updateLocalStorage() {
     localStorage.setItem(
-      "deliveryRecords",
+      getRecordsStorageKey(),
       JSON.stringify(records)
     );
   }
@@ -1341,6 +1354,11 @@
     }
 
     currentUser = null;
+    records = [];
+    expenseItems = [];
+    renderRecords();
+    renderExpenses();
+    updateDashboard();
 
     document.getElementById("authForm").style.display = "block";
     document.getElementById("userArea").style.display = "none";
@@ -1446,26 +1464,19 @@
       if (expenseError) throw expenseError;
       expenseItems = expenseData || [];
 
-      const cloudRecords = cloudData.map(fromCloudRecord);
+      const cloudRecords = (cloudData || []).map(fromCloudRecord);
 
-      // 클라우드 기록을 우선하고
-      // 로컬에만 있는 기록은 추가한다.
+      // 로그인한 계정 전용 로컬 기록만 클라우드 기록과 합칩니다.
+      // 다른 계정 또는 비로그인 상태의 기록은 가져오지 않습니다.
+      loadLocalRecords();
       const merged = [...cloudRecords];
 
       records.forEach(localRecord => {
-
-        const exists = merged.some(
-          item => item.date === localRecord.date
-        );
-
-        if (!exists) {
-          merged.push(localRecord);
-        }
-
+        const exists = merged.some(item => item.date === localRecord.date);
+        if (!exists) merged.push(localRecord);
       });
 
       records = merged;
-
       updateLocalStorage();
 
       // 합쳐진 기록을 클라우드에 저장
@@ -2351,10 +2362,15 @@
       ? data.session.user
       : null;
 
+    loadLocalRecords();
     await updateAuthUI();
 
     if (currentUser) {
       await syncRecords();
+    } else {
+      renderRecords();
+      renderExpenses();
+      updateDashboard();
     }
 
     supabaseClient.auth.onAuthStateChange(
@@ -2364,14 +2380,23 @@
           ? session.user
           : null;
 
+        if (event === "SIGNED_IN") {
+          loadLocalRecords();
+        }
+
+        if (event === "SIGNED_OUT") {
+          records = [];
+          expenseItems = [];
+          renderRecords();
+          renderExpenses();
+          updateDashboard();
+          setSyncStatus("로그아웃되었습니다.");
+        }
+
         await updateAuthUI();
 
         if (event === "SIGNED_IN") {
           await syncRecords();
-        }
-
-        if (event === "SIGNED_OUT") {
-          setSyncStatus("로그아웃되었습니다.");
         }
 
       }
