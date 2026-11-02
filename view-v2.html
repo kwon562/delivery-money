@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>배달머니 - Delivery Money</title>
+  <title>배달머니 | 배달 수입·지출 관리</title>
+  <meta name="description" content="배민커넥트와 쿠팡이츠 배달 수입, 지출, 운행 시간과 순수익을 기록하고 분석하는 개인용 대시보드입니다.">
+  <meta name="theme-color" content="#13a87b">
 
   <style>
     * {
@@ -264,6 +266,23 @@
       .analytics-card .value { font-size:18px; }
       .chart-panel { padding:15px; }
       #incomeChart { height:210px; }
+    }
+
+    :focus-visible { outline:3px solid rgba(54,134,232,.55); outline-offset:2px; }
+    button { min-height:42px; }
+    input, select { min-height:44px; }
+    .sync-status, .auth-status { overflow-wrap:anywhere; }
+    @media (max-width:750px) {
+      header { flex-wrap:wrap; margin-bottom:20px; }
+      .date { font-size:13px; }
+      .tools button { flex:1 1 135px; }
+      .weekday-row { grid-template-columns:48px minmax(0,1fr) auto; gap:7px; }
+      .analytics-card .value { overflow-wrap:anywhere; }
+    }
+    @media (max-width:380px) {
+      .analytics-card { padding:11px; }
+      .analytics-card .value { font-size:16px; }
+      .bar-row { grid-template-columns:78px minmax(0,1fr) auto; gap:6px; font-size:11px; }
     }
 
     @media (max-width: 750px) {
