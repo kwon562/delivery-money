@@ -1027,35 +1027,111 @@
 
   function drawIncomeChart(selected) {
     const canvas = document.getElementById("incomeChart");
-    if (!canvas) return;
-    const width = Math.max(280, Math.floor(canvas.getBoundingClientRect().width));
-    const height = 240;
-    const ratio = window.devicePixelRatio || 1;
-    canvas.width = width * ratio; canvas.height = height * ratio;
+    if (!canvas || !selected) return;
+
+    // 모바일에서는 실제 표시 영역의 너비를 기준으로 캔버스를 다시 설정합니다.
+    const width = Math.max(1, Math.floor(canvas.getBoundingClientRect().width));
+    const height = window.matchMedia("(max-width: 750px)").matches ? 210 : 240;
+    if (width <= 1) return;
+
+    const ratio = Math.max(1, window.devicePixelRatio || 1);
+    canvas.style.width = "100%";
+    canvas.style.height = height + "px";
+    canvas.width = Math.round(width * ratio);
+    canvas.height = Math.round(height * ratio);
+
     const ctx = canvas.getContext("2d");
-    ctx.scale(ratio, ratio); ctx.clearRect(0, 0, width, height);
+    if (!ctx) return;
+    // 캔버스 크기를 바꿀 때마다 변환 행렬을 초기화해 모바일에서 흐려지거나
+    // 그래프가 누적해서 축소되는 현상을 방지합니다.
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    ctx.clearRect(0, 0, width, height);
+
     const end = new Date(selected + "T12:00:00");
     const days = [];
     for (let i = 6; i >= 0; i--) {
-      const d = new Date(end); d.setDate(d.getDate() - i);
+      const d = new Date(end);
+      d.setDate(d.getDate() - i);
       const key = d.toLocaleDateString("sv-SE");
       const r = records.find(item => item.date === key);
-      days.push({label:(d.getMonth()+1)+"/"+d.getDate(), total:r ? Number(r.total)||0 : 0, net:r ? Number(r.net)||0 : 0});
+      days.push({
+        label: (d.getMonth() + 1) + "/" + d.getDate(),
+        total: r ? Number(r.total) || 0 : 0,
+        net: r ? Number(r.net) || 0 : 0
+      });
     }
+
     const maxValue = Math.max(10000, ...days.map(d => Math.max(d.total, d.net)));
-    const left=42, right=12, top=16, bottom=34, plotW=width-left-right, plotH=height-top-bottom;
-    ctx.font="11px Arial"; ctx.fillStyle="#7b8491"; ctx.strokeStyle="#e9edf2";
-    for(let i=0;i<=4;i++){const y=top+plotH*i/4;ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(width-right,y);ctx.stroke();ctx.textAlign="right";ctx.fillText(Math.round(maxValue*(4-i)/4/10000)+"만",left-7,y+4);}
-    const slot=plotW/7, barW=Math.min(22,slot*.48);
-    days.forEach((d,i)=>{const x=left+slot*i+(slot-barW)/2;const h=d.total/maxValue*plotH;ctx.fillStyle="#13a87b";ctx.fillRect(x,top+plotH-h,barW,h);ctx.fillStyle="#7b8491";ctx.textAlign="center";ctx.fillText(d.label,left+slot*i+slot/2,height-10);});
+    const left = 42, right = 12, top = 16, bottom = 34;
+    const plotW = Math.max(1, width - left - right);
+    const plotH = height - top - bottom;
+
+    ctx.font = "11px Arial";
+    ctx.fillStyle = "#7b8491";
+    ctx.strokeStyle = "#e9edf2";
+    ctx.lineWidth = 1;
+
+    for (let i = 0; i <= 4; i++) {
+      const y = top + plotH * i / 4;
+      ctx.beginPath();
+      ctx.moveTo(left, y);
+      ctx.lineTo(width - right, y);
+      ctx.stroke();
+      ctx.textAlign = "right";
+      ctx.fillText(Math.round(maxValue * (4 - i) / 4 / 10000) + "만", left - 7, y + 4);
+    }
+
+    const slot = plotW / 7;
+    const barW = Math.min(22, slot * 0.48);
+    days.forEach((d, i) => {
+      const x = left + slot * i + (slot - barW) / 2;
+      const h = d.total / maxValue * plotH;
+      ctx.fillStyle = "#13a87b";
+      ctx.fillRect(x, top + plotH - h, barW, h);
+      ctx.fillStyle = "#7b8491";
+      ctx.textAlign = "center";
+      ctx.fillText(d.label, left + slot * i + slot / 2, height - 10);
+    });
+
     ctx.beginPath();
-    days.forEach((d,i)=>{const x=left+slot*i+slot/2,y=top+plotH-Math.max(0,d.net)/maxValue*plotH;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);});
-    ctx.strokeStyle="#4778df";ctx.lineWidth=2.5;ctx.stroke();
-    days.forEach((d,i)=>{const x=left+slot*i+slot/2,y=top+plotH-Math.max(0,d.net)/maxValue*plotH;ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle="#4778df";ctx.fill();});
+    days.forEach((d, i) => {
+      const x = left + slot * i + slot / 2;
+      const y = top + plotH - Math.max(0, d.net) / maxValue * plotH;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = "#4778df";
+    ctx.lineWidth = 2.5;
+    ctx.stroke();
+
+    days.forEach((d, i) => {
+      const x = left + slot * i + slot / 2;
+      const y = top + plotH - Math.max(0, d.net) / maxValue * plotH;
+      ctx.beginPath();
+      ctx.arc(x, y, 3, 0, Math.PI * 2);
+      ctx.fillStyle = "#4778df";
+      ctx.fill();
+    });
   }
-  window.addEventListener("resize", () => {
-    const input=document.getElementById("date"); if(input && input.value) drawIncomeChart(input.value);
-  });
+
+  // 모바일 최초 표시, 화면 회전, 주소창 크기 변화에 대응합니다.
+  function redrawIncomeChart() {
+    const input = document.getElementById("date");
+    if (input && input.value) {
+      requestAnimationFrame(() => drawIncomeChart(input.value));
+    }
+  }
+
+  window.addEventListener("resize", redrawIncomeChart);
+  window.addEventListener("orientationchange", redrawIncomeChart);
+
+  if ("ResizeObserver" in window) {
+    const chartWrap = document.querySelector(".chart-wrap");
+    if (chartWrap) {
+      const chartObserver = new ResizeObserver(redrawIncomeChart);
+      chartObserver.observe(chartWrap);
+    }
+  }
 
 
   async function addExpense() {
