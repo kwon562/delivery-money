@@ -762,6 +762,74 @@
       *,*::before,*::after { scroll-behavior:auto !important; transition:none !important; }
     }
 
+
+    /* MONTHLY OVERVIEW PREMIUM SUMMARY */
+    .monthly-overview {
+      position:relative;
+      margin:20px 0 28px;
+      padding:27px 29px 22px;
+      overflow:hidden;
+      border:1px solid #315346;
+      border-radius:23px;
+      background:
+        radial-gradient(ellipse at 85% 0%,rgba(61,205,157,.14),transparent 40%),
+        linear-gradient(125deg,#172d2d 0%,#172638 54%,#182538 100%);
+      box-shadow:0 18px 48px rgba(0,0,0,.25);
+    }
+    .monthly-overview::after {
+      content:"";
+      position:absolute;
+      width:260px;height:260px;
+      right:-90px;top:-155px;
+      border:1px solid rgba(93,224,180,.12);
+      border-radius:50%;
+      box-shadow:0 0 0 28px rgba(93,224,180,.025),0 0 0 58px rgba(93,224,180,.02);
+      pointer-events:none;
+    }
+    .monthly-overview-head,.monthly-overview-main,.monthly-overview-stats {
+      position:relative;z-index:1;
+    }
+    .monthly-overview-head { display:flex;justify-content:space-between;align-items:flex-start;gap:16px; }
+    .monthly-overview .eyebrow { color:#63dcb2;font-size:10px;font-weight:850;letter-spacing:.18em; }
+    .monthly-overview h2 { margin:7px 0 5px;color:#f1f7f7;font-size:20px;letter-spacing:-.045em; }
+    .monthly-overview-head p { margin:0;color:#9aafbb;font-size:12px; }
+    .monthly-overview-chip {
+      display:flex;align-items:center;gap:7px;padding:8px 11px;
+      color:#a9ddcd;background:rgba(66,190,150,.09);
+      border:1px solid rgba(91,212,172,.2);border-radius:99px;
+      font-size:9px;font-weight:800;letter-spacing:.08em;white-space:nowrap;
+    }
+    .live-dot { width:6px;height:6px;border-radius:50%;background:#51d9aa;box-shadow:0 0 9px #51d9aa; }
+    .monthly-overview-main {
+      display:grid;grid-template-columns:1.1fr .9fr;gap:34px;align-items:end;
+      margin-top:27px;padding-bottom:23px;border-bottom:1px solid rgba(179,208,207,.13);
+    }
+    .monthly-net-block { display:flex;flex-direction:column;gap:7px; }
+    .monthly-net-block span,.progress-heading span { color:#a7bac4;font-size:12px;font-weight:650; }
+    .monthly-net-block strong { color:#62e5b7;font-size:clamp(29px,4vw,43px);font-weight:850;letter-spacing:-.065em;line-height:1.1;overflow-wrap:anywhere; }
+    .monthly-net-block small { color:#8fa6b2;font-size:11px; }
+    .progress-heading,.progress-foot { display:flex;justify-content:space-between;align-items:center;gap:10px; }
+    .progress-heading strong { color:#e5f5ef;font-size:17px;font-weight:800; }
+    .overview-progress-track { height:11px;margin:12px 0 9px;overflow:hidden;border-radius:99px;background:#304252; }
+    .overview-progress-track div { width:0;height:100%;border-radius:99px;background:linear-gradient(90deg,#35bd91,#74edc2);box-shadow:0 0 15px rgba(77,222,176,.3);transition:width .35s ease; }
+    .progress-foot { color:#91a8b5;font-size:10px; }
+    .monthly-overview-stats { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding-top:19px; }
+    .monthly-overview-stats div { display:flex;flex-direction:column;gap:7px;min-width:0; }
+    .monthly-overview-stats span { color:#91a8b5;font-size:11px; }
+    .monthly-overview-stats strong { color:#e5edf3;font-size:16px;font-weight:780;letter-spacing:-.035em;overflow-wrap:anywhere; }
+    @media(max-width:750px) {
+      .monthly-overview { margin:15px 0 23px;padding:21px 18px 18px;border-radius:19px; }
+      .monthly-overview-main { grid-template-columns:1fr;gap:21px;margin-top:22px; }
+      .monthly-overview-stats { grid-template-columns:repeat(2,minmax(0,1fr));row-gap:17px; }
+      .monthly-overview-stats strong { font-size:15px; }
+      .monthly-overview-chip { padding:7px 9px;font-size:8px; }
+    }
+    @media(max-width:380px) {
+      .monthly-overview-head { flex-direction:column; }
+      .monthly-overview-chip { align-self:flex-start; }
+      .monthly-net-block strong { font-size:29px; }
+    }
+
   </style>
 </head>
 
@@ -838,6 +906,36 @@
     </div>
 
   </div>
+
+  <!-- 이번 달 핵심 요약 -->
+  <section class="monthly-overview" aria-label="이번 달 핵심 실적">
+    <div class="monthly-overview-head">
+      <div>
+        <div class="eyebrow">MONTHLY OVERVIEW</div>
+        <h2>이번 달 수익 현황</h2>
+        <p id="monthlyOverviewCaption">선택한 날짜가 속한 달의 누적 실적입니다.</p>
+      </div>
+      <div class="monthly-overview-chip"><span class="live-dot"></span> MONTH TO DATE</div>
+    </div>
+    <div class="monthly-overview-main">
+      <div class="monthly-net-block">
+        <span>이번 달 순수익</span>
+        <strong id="overviewMonthNet">0원</strong>
+        <small id="overviewMonthCompare">기록을 입력하면 월간 실적이 표시됩니다.</small>
+      </div>
+      <div class="monthly-progress-block">
+        <div class="progress-heading"><span>월간 목표 달성률</span><strong id="overviewGoalRate">0%</strong></div>
+        <div class="overview-progress-track"><div id="overviewGoalBar"></div></div>
+        <div class="progress-foot"><span id="overviewGoalCurrent">현재 0원</span><span id="overviewGoalTarget">목표 1,000,000원</span></div>
+      </div>
+    </div>
+    <div class="monthly-overview-stats">
+      <div><span>총수입</span><strong id="overviewGross">0원</strong></div>
+      <div><span>총지출</span><strong id="overviewExpenses">0원</strong></div>
+      <div><span>배달 건수</span><strong id="overviewOrders">0건</strong></div>
+      <div><span>운행 시간</span><strong id="overviewHours">0시간</strong></div>
+    </div>
+  </section>
 
 
   <section class="analytics-section">
@@ -1529,6 +1627,27 @@
     document.getElementById("weekOrders").textContent = weekOrders.toLocaleString("ko-KR") + "건";
     document.getElementById("monthNet").textContent = won(monthNet);
     document.getElementById("monthHourly").textContent = won(monthHours > 0 ? Math.round(monthNet / monthHours) : 0);
+
+    // 이번 달 핵심 실적 요약
+    const monthGross = sum(monthRecords, "total");
+    const monthExpenses = sum(monthRecords, "expenses");
+    const monthOrders = sum(monthRecords, "orders");
+    const goal = Math.max(0, Number(localStorage.getItem("deliveryMonthlyGoal")) || 1000000);
+    const goalRate = goal > 0 ? monthNet / goal * 100 : 0;
+    document.getElementById("monthlyOverviewCaption").textContent =
+      Number(monthKey.slice(5, 7)) + "월 누적 · " + monthRecords.length + "일 기록";
+    document.getElementById("overviewMonthNet").textContent = won(monthNet);
+    document.getElementById("overviewMonthCompare").textContent =
+      monthNet >= 0 ? "이번 달 현재까지 쌓인 순수익" : "이번 달 지출이 수입보다 많습니다.";
+    document.getElementById("overviewGoalRate").textContent = goal > 0 ? Math.round(goalRate) + "%" : "-";
+    document.getElementById("overviewGoalBar").style.width = Math.max(0, Math.min(100, goalRate)) + "%";
+    document.getElementById("overviewGoalCurrent").textContent = "현재 " + won(monthNet);
+    document.getElementById("overviewGoalTarget").textContent = "목표 " + won(goal);
+    document.getElementById("overviewGross").textContent = won(monthGross);
+    document.getElementById("overviewExpenses").textContent = won(monthExpenses);
+    document.getElementById("overviewOrders").textContent = monthOrders.toLocaleString("ko-KR") + "건";
+    document.getElementById("overviewHours").textContent = monthHours.toLocaleString("ko-KR") + "시간";
+
     const bm = sum(monthRecords, "baemin");
     const cp = sum(monthRecords, "coupang");
     const max = Math.max(bm, cp, 1);
