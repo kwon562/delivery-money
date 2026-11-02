@@ -1269,40 +1269,37 @@
 
   function downloadCSV() {
 
-    if (records.length === 0) {
+    if (records.length === 0 && expenseItems.length === 0) {
       alert("다운로드할 기록이 없습니다.");
       return;
     }
 
     const header = [
-      "날짜",
-      "배민 수입",
-      "배민 배달 건수",
-      "쿠팡 수입",
-      "쿠팡 배달 건수",
-      "운행 시간",
-      "지출",
-      "총수입",
-      "순수익",
-      "총배달 건수"
+      "구분", "날짜", "배민 수입", "배민 배달 건수",
+      "쿠팡 수입", "쿠팡 배달 건수", "운행 시간",
+      "총지출", "총수입", "순수익", "총배달 건수",
+      "지출 항목", "지출 금액", "메모"
     ];
 
-    const rows = records.map(r => [
-      r.date,
-      r.baemin,
-      r.baeminOrders,
-      r.coupang,
-      r.coupangOrders,
-      r.hours,
-      r.expenses,
-      r.total,
-      r.net,
-      r.orders
+    const recordRows = records.map(r => [
+      "일별 배달 기록", r.date, r.baemin, r.baeminOrders,
+      r.coupang, r.coupangOrders, r.hours, r.expenses,
+      r.total, r.net, r.orders, "", "", ""
     ]);
 
-    const csv = [header, ...rows]
-      .map(row => row.join(","))
-      .join("\n");
+    const expenseRows = expenseItems.map(item => [
+      "상세 지출", item.delivery_date, "", "", "", "", "",
+      "", "", "", "", item.category, item.amount, item.memo || ""
+    ]);
+
+    const escapeCSV = value => {
+      const text = String(value ?? "");
+      return /[",\n\r]/.test(text) ? '"' + text.replace(/"/g, '""') + '"' : text;
+    };
+
+    const csv = [header, ...recordRows, ...expenseRows]
+      .map(row => row.map(escapeCSV).join(","))
+      .join("\r\n");
 
     const blob = new Blob(
       ["\uFEFF" + csv],
@@ -1311,14 +1308,11 @@
 
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-
     link.href = url;
-    link.download = "배달머니_배달기록.csv";
-
+    link.download = "배달머니_전체기록.csv";
     link.click();
 
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-
   }
 
   // ==================================
@@ -1329,9 +1323,10 @@
 
     const backup = {
       appName: "Delivery Money",
-      version: 1,
+      version: 2,
       backupDate: new Date().toISOString(),
-      records: records
+      records: records,
+      expenseItems: expenseItems
     };
 
     const blob = new Blob(
@@ -1388,28 +1383,58 @@
         }
 
         backup.records.forEach(record => {
-
-          const index = records.findIndex(
-            r => r.date === record.date
-          );
-
-          if (index !== -1) {
-            records[index] = record;
-          } else {
-            records.push(record);
-          }
-
+          const index = records.findIndex(r => r.date === record.date);
+          if (index !== -1) records[index] = record;
+          else records.push(record);
         });
+
+        // 구버전 백업(version 1)도 복구할 수 있도록 상세 지출이 없으면 빈 배열로 처리합니다.
+        const importedExpenses = Array.isArray(backup.expenseItems) ? backup.expenseItems : [];
+        const expenseKey = item =>
+          [item.delivery_date, item.category, Number(item.amount), item.memo || "", item.created_at || ""].join("|");
+        const knownExpenses = new Set(expenseItems.map(expenseKey));
+        const newExpenses = importedExpenses.filter(item => !knownExpenses.has(expenseKey(item)));
+
+        if (currentUser && newExpenses.length > 0) {
+          const rowsToInsert = newExpenses.map(item => ({
+            user_id: currentUser.id,
+            delivery_date: item.delivery_date,
+            category: item.category,
+            amount: Number(item.amount),
+            memo: item.memo || ""
+          }));
+          const { error: expenseRestoreError } = await supabaseClient
+            .from("expense_items")
+            .insert(rowsToInsert);
+          if (expenseRestoreError) {
+            alert("배달 기록은 복구했지만 상세 지출 복구에 실패했습니다: " + expenseRestoreError.message);
+          } else {
+            const { data: restoredExpenses } = await supabaseClient
+              .from("expense_items")
+              .select("*")
+              .eq("user_id", currentUser.id)
+              .order("created_at", { ascending: false });
+            expenseItems = restoredExpenses || expenseItems;
+          }
+        } else if (!currentUser) {
+          expenseItems = [...newExpenses, ...expenseItems];
+        }
 
         updateLocalStorage();
 
-        renderRecords();
-        updateDashboard();
-
         if (currentUser) {
-          await syncRecords();
+          const uploadData = records.map(toCloudRecord);
+          const { error: recordRestoreError } = await supabaseClient
+            .from("delivery_records")
+            .upsert(uploadData, { onConflict: "user_id,delivery_date" });
+          if (recordRestoreError) {
+            alert("배달 기록 클라우드 복구에 실패했습니다: " + recordRestoreError.message);
+          }
         }
 
+        renderRecords();
+        renderExpenses();
+        updateDashboard();
         alert("데이터 복구가 완료되었습니다!");
 
       } catch (error) {
