@@ -248,6 +248,14 @@
     .weekday-best strong { color:#13a87b; }
     #monthlyGoal { box-sizing:border-box; padding:10px; border:1px solid #dfe3e8; border-radius:9px; font-size:14px; }
     #monthlyGoalBar { background:#3686e8; }
+    .monthly-trend { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:9px; align-items:end; min-height:170px; padding:12px 4px 0; }
+    .monthly-trend-item { min-width:0; text-align:center; display:flex; flex-direction:column; justify-content:flex-end; height:160px; gap:6px; }
+    .monthly-trend-value { font-size:10px; color:#666; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .monthly-trend-track { height:105px; background:#edf0f4; border-radius:8px 8px 3px 3px; display:flex; align-items:flex-end; overflow:hidden; }
+    .monthly-trend-fill { width:100%; min-height:2px; background:#13a87b; border-radius:8px 8px 0 0; }
+    .monthly-trend-month { font-size:11px; color:#666; }
+    @media(max-width:480px) { .monthly-trend { gap:5px; } .monthly-trend-value { font-size:9px; } }
+
 
 
     @media (max-width:750px) {
@@ -390,6 +398,15 @@
         <div class="bar-row"><strong>쿠팡이츠</strong><div class="bar-track"><div class="bar-fill coupang" id="coupangBar" style="width:0%"></div></div><strong id="monthCoupang">0원</strong></div>
       </div>
       <div class="analytics-note">현재 저장된 기록의 월간 합계를 기준으로 계산합니다.</div>
+    </div>
+    <div class="chart-panel">
+      <h3 style="margin:0 0 12px;font-size:16px;">월별 수익 변화</h3>
+      <div class="analytics-grid" style="margin-bottom:14px;">
+        <div class="analytics-card"><div class="label">지난달 순수익</div><div class="value" id="previousMonthNet">0원</div></div>
+        <div class="analytics-card"><div class="label">지난달 대비</div><div class="value" id="monthChangeRate">-</div></div>
+      </div>
+      <div id="monthlyTrend" class="monthly-trend" aria-label="최근 6개월 순수익 비교"></div>
+      <div class="analytics-note">선택한 날짜가 속한 달과 이전 5개월의 순수익 합계입니다.</div>
     </div>
     <div class="chart-panel">
       <h3 style="margin:0 0 12px;font-size:16px;">요일별 수익 분석</h3>
@@ -1058,8 +1075,56 @@
     document.getElementById("baeminBar").style.width = (bm / max * 100) + "%";
     document.getElementById("coupangBar").style.width = (cp / max * 100) + "%";
     drawWeekdayAnalysis();
+    drawMonthlyTrend(monthKey);
     drawMonthlyProjection(monthKey, monthNet);
     drawIncomeChart(selected);
+  }
+
+  function drawMonthlyTrend(monthKey) {
+    const container = document.getElementById("monthlyTrend");
+    if (!container) return;
+    const [year, month] = monthKey.split("-").map(Number);
+    const months = [];
+    for (let offset = 5; offset >= 0; offset--) {
+      const date = new Date(year, month - 1 - offset, 1);
+      const key = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0");
+      const items = records.filter(r => r.date && r.date.slice(0, 7) === key);
+      const net = items.reduce((total, r) => total + (Number(r.net) || 0), 0);
+      months.push({ key, label: (date.getMonth() + 1) + "월", net });
+    }
+    const previous = months[4].net;
+    const current = months[5].net;
+    document.getElementById("previousMonthNet").textContent = won(previous);
+    const change = document.getElementById("monthChangeRate");
+    if (previous === 0) {
+      change.textContent = current > 0 ? "비교 기준 없음" : "0%";
+      change.style.color = "#777";
+    } else {
+      const rate = (current - previous) / Math.abs(previous) * 100;
+      change.textContent = (rate > 0 ? "+" : "") + rate.toFixed(1) + "%";
+      change.style.color = rate > 0 ? "#13a87b" : rate < 0 ? "#d9534f" : "#777";
+    }
+    const max = Math.max(1, ...months.map(m => Math.max(0, m.net)));
+    container.innerHTML = "";
+    months.forEach(m => {
+      const item = document.createElement("div");
+      item.className = "monthly-trend-item";
+      const value = document.createElement("div");
+      value.className = "monthly-trend-value";
+      value.textContent = won(m.net);
+      const track = document.createElement("div");
+      track.className = "monthly-trend-track";
+      const fill = document.createElement("div");
+      fill.className = "monthly-trend-fill";
+      fill.style.height = Math.max(0, m.net) / max * 100 + "%";
+      if (m.key === monthKey) fill.style.background = "#3686e8";
+      track.appendChild(fill);
+      const label = document.createElement("div");
+      label.className = "monthly-trend-month";
+      label.textContent = m.label;
+      item.append(value, track, label);
+      container.appendChild(item);
+    });
   }
 
   function drawMonthlyProjection(monthKey, monthNet) {
