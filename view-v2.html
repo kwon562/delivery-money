@@ -213,6 +213,15 @@
       font-size: 13px;
       color: #777;
     }
+    .expense-panel{background:#fff;padding:22px;border-radius:16px;margin-top:20px;box-shadow:0 3px 15px rgba(0,0,0,.04)}
+    .expense-form{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+    .expense-form .full{grid-column:1/-1}
+    .expense-add{background:#20242c;color:#fff;width:100%;margin-top:18px}
+    .expense-total{font-size:22px;font-weight:800;color:#d44;margin:8px 0 14px}
+    .expense-list{width:100%;border-collapse:collapse;min-width:520px}
+    .expense-list-wrap{overflow-x:auto}
+    .expense-empty{color:#888;text-align:center;padding:22px 8px}
+    @media(max-width:600px){.expense-form{grid-template-columns:1fr}.expense-form .full{grid-column:auto}.expense-panel{padding:17px}}
 
 
     .analytics-section { margin-top:22px; }
@@ -397,7 +406,7 @@
       <label>오늘 운행 시간 (시간)</label>
       <input type="number" id="hours" placeholder="예: 5" min="0" step="0.5">
 
-      <label>오늘 지출 (원)</label>
+      <label>기타 지출 (원) · 상세 지출과 별도</label>
       <input type="number" id="expenses" placeholder="예: 8000" min="0">
 
       <button class="btn" onclick="saveRecord()">
@@ -432,6 +441,20 @@
     </div>
 
   </div>
+
+  <section class="expense-panel">
+    <h2 class="section-title">💳 지출 상세 관리</h2>
+    <p style="color:#777;font-size:13px;margin-top:-5px;">선택한 날짜의 지출을 항목별로 기록합니다. 등록한 지출은 총지출과 순수익에 자동 반영됩니다.</p>
+    <div class="expense-form">
+      <div><label for="expenseCategory">지출 항목</label><select id="expenseCategory" style="width:100%;padding:13px;border:1px solid #ddd;border-radius:9px;font-size:15px;"><option>유류비</option><option>식비</option><option>오토바이 정비비</option><option>보험료</option><option>통신비</option><option>주차·통행료</option><option>장비·용품</option><option>기타</option></select></div>
+      <div><label for="expenseAmount">금액 (원)</label><input id="expenseAmount" type="number" min="1" placeholder="예: 8000"></div>
+      <div class="full"><label for="expenseMemo">메모</label><input id="expenseMemo" type="text" maxlength="100" placeholder="예: 휘발유 주유"></div>
+    </div>
+    <button class="expense-add" onclick="addExpense()">+ 지출 내역 등록</button>
+    <h3 style="font-size:15px;margin:22px 0 6px;">선택한 날짜의 지출 합계</h3>
+    <div class="expense-total" id="expenseTotal">0원</div>
+    <div class="expense-list-wrap"><table class="expense-list"><thead><tr><th>항목</th><th>금액</th><th>메모</th><th>관리</th></tr></thead><tbody id="expenseList"><tr><td colspan="4" class="expense-empty">아직 등록된 지출이 없습니다.</td></tr></tbody></table></div>
+  </section>
 
   <!-- 기록 내역 -->
   <div class="history">
@@ -515,6 +538,7 @@
   );
 
   let currentUser = null;
+  let expenseItems = [];
 
   const today = new Date();
 
@@ -730,6 +754,9 @@
           .eq("user_id", currentUser.id);
 
       if (error) throw error;
+      const { data: expenseData, error: expenseError } = await supabaseClient.from("expense_items").select("*").eq("user_id", currentUser.id).order("created_at", { ascending:false });
+      if (expenseError) throw expenseError;
+      expenseItems = expenseData || [];
 
       const cloudRecords = cloudData.map(fromCloudRecord);
 
@@ -770,6 +797,7 @@
       }
 
       renderRecords();
+      renderExpenses();
       updateDashboard();
 
       setSyncStatus("클라우드 동기화 완료");
@@ -816,8 +844,9 @@
     const hours =
       Number(document.getElementById("hours").value) || 0;
 
-    const expenses =
-      Number(document.getElementById("expenses").value) || 0;
+    const otherExpenses = Number(document.getElementById("expenses").value) || 0;
+    const detailedExpenses = expenseItems.filter(x => x.delivery_date === date).reduce((s,x) => s + Number(x.amount || 0), 0);
+    const expenses = otherExpenses + detailedExpenses;
 
     if (!date) {
       alert("날짜를 선택해주세요.");
@@ -902,6 +931,11 @@
 
   function updateDashboard() {
     updateAnalytics();
+    renderExpenses();
+    const selectedDate = document.getElementById("date").value;
+    const selectedRecord = records.find(r => r.date === selectedDate);
+    const itemTotal = expenseItems.filter(x => x.delivery_date === selectedDate).reduce((s,x) => s + Number(x.amount || 0), 0);
+    document.getElementById("expenses").value = selectedRecord ? Math.max(0, Number(selectedRecord.expenses || 0) - itemTotal) : "";
 
 
     const date = document.getElementById("date").value;
@@ -1023,6 +1057,47 @@
     const input=document.getElementById("date"); if(input && input.value) drawIncomeChart(input.value);
   });
 
+
+  async function addExpense() {
+    if (!currentUser) { alert("지출 내역을 클라우드에 저장하려면 먼저 로그인해주세요."); return; }
+    const date=document.getElementById("date").value, category=document.getElementById("expenseCategory").value;
+    const amount=Number(document.getElementById("expenseAmount").value), memo=document.getElementById("expenseMemo").value.trim();
+    if(!date){alert("날짜를 먼저 선택해주세요.");return;}
+    if(!Number.isInteger(amount)||amount<=0){alert("1원 이상의 금액을 입력해주세요.");return;}
+    const {data,error}=await supabaseClient.from("expense_items").insert({user_id:currentUser.id,delivery_date:date,category,amount,memo}).select().single();
+    if(error){alert("지출 저장 실패: "+error.message);return;}
+    expenseItems.unshift(data);
+    let record=records.find(r=>r.date===date);
+    if(!record){record={date,baemin:0,baeminOrders:0,coupang:0,coupangOrders:0,hours:0,expenses:0,total:0,net:0,orders:0};records.push(record);}
+    record.expenses=Number(record.expenses||0)+amount; record.net=Number(record.total||0)-record.expenses; updateLocalStorage();
+    const {error:saveError}=await supabaseClient.from("delivery_records").upsert(toCloudRecord(record),{onConflict:"user_id,delivery_date"});
+    if(saveError)alert("상세 지출은 저장됐지만 수익 합계 저장에 실패했습니다: "+saveError.message);
+    document.getElementById("expenseAmount").value="";document.getElementById("expenseMemo").value="";
+    renderRecords();updateDashboard();setSyncStatus("지출 내역 클라우드 저장 완료");
+  }
+
+  async function deleteExpense(id) {
+    if(!confirm("이 지출 내역을 삭제할까요?"))return;
+    const item=expenseItems.find(x=>x.id===id);if(!item)return;
+    const {error}=await supabaseClient.from("expense_items").delete().eq("id",id).eq("user_id",currentUser.id);
+    if(error){alert("지출 삭제 실패: "+error.message);return;}
+    expenseItems=expenseItems.filter(x=>x.id!==id);
+    const record=records.find(r=>r.date===item.delivery_date);
+    if(record){record.expenses=Math.max(0,Number(record.expenses||0)-Number(item.amount||0));record.net=Number(record.total||0)-record.expenses;updateLocalStorage();
+      const {error:saveError}=await supabaseClient.from("delivery_records").upsert(toCloudRecord(record),{onConflict:"user_id,delivery_date"});
+      if(saveError)alert("지출은 삭제됐지만 수익 합계 갱신에 실패했습니다: "+saveError.message);
+    }
+    renderRecords();updateDashboard();setSyncStatus("지출 내역 삭제 완료");
+  }
+
+  function renderExpenses(){
+    const date=document.getElementById("date").value,list=document.getElementById("expenseList");if(!list)return;
+    const items=expenseItems.filter(x=>x.delivery_date===date),total=items.reduce((s,x)=>s+Number(x.amount||0),0);
+    document.getElementById("expenseTotal").textContent=won(total);list.innerHTML="";
+    if(!items.length){list.innerHTML='<tr><td colspan="4" class="expense-empty">아직 등록된 지출이 없습니다.</td></tr>';return;}
+    items.forEach(item=>{const row=document.createElement("tr");[item.category,won(item.amount),item.memo||"-"].forEach(v=>{const td=document.createElement("td");td.textContent=v;row.appendChild(td);});
+      const td=document.createElement("td"),btn=document.createElement("button");btn.className="delete-btn";btn.textContent="삭제";btn.onclick=()=>deleteExpense(item.id);td.appendChild(btn);row.appendChild(td);list.appendChild(row);});
+  }
 
   function renderRecords() {
 
@@ -1291,6 +1366,7 @@
   async function initializeApp() {
 
     renderRecords();
+    renderExpenses();
     updateDashboard();
 
     const { data, error } =
