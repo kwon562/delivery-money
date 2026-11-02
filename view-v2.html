@@ -508,6 +508,104 @@
       .analytics-card .value { font-size: 15px; }
     }
 
+
+    /* DELIVERY MONEY DARK PREMIUM UI v2 */
+    :root {
+      color-scheme: dark;
+      --dm-ink: #edf3f8;
+      --dm-muted: #94a3b5;
+      --dm-green: #43d6a5;
+      --dm-green-dark: #20b889;
+      --dm-line: #293444;
+      --dm-surface: #151e2b;
+      --dm-bg: #0b111b;
+      --dm-shadow: 0 14px 38px rgba(0,0,0,.24);
+    }
+    body {
+      color: var(--dm-ink);
+      background:
+        radial-gradient(ellipse at 12% -8%, rgba(28,174,132,.15), transparent 34%),
+        radial-gradient(ellipse at 100% 12%, rgba(66,105,171,.10), transparent 30%),
+        #0b111b;
+    }
+    header {
+      background: linear-gradient(135deg, rgba(24,35,50,.96), rgba(17,27,40,.96));
+      border-color: #2a394b;
+      box-shadow: 0 16px 42px rgba(0,0,0,.24);
+    }
+    .logo { color: #f1f6fb; }
+    .subtitle, .auth-status, .sync-status { color: #9aaabd; }
+    .date {
+      color: #c1ccda;
+      background: #202c3b;
+      border-color: #344357;
+    }
+    .section-title, .chart-panel h3 { color: #eaf1f7; }
+    .card, .panel, .history, .auth-panel, .expense-panel,
+    .analytics-card, .chart-panel {
+      color: #e8eff6;
+      background: linear-gradient(155deg, #182333, #131c29);
+      border-color: #2a394b;
+      box-shadow: var(--dm-shadow);
+    }
+    .card:hover { box-shadow: 0 18px 42px rgba(0,0,0,.32); }
+    .card-label, .analytics-card .label { color: #9aaabd; }
+    .card-value, .analytics-card .value { color: #f1f6fb; }
+    .green, .analytics-card .value.green { color: #43d6a5; }
+    label { color: #c3cfdd; }
+    input, select, textarea {
+      color: #edf3f8;
+      background: #101925;
+      border-color: #354458;
+      color-scheme: dark;
+    }
+    input::placeholder, textarea::placeholder { color: #738399; }
+    input:focus, select:focus, textarea:focus {
+      color: #fff;
+      background: #121e2b;
+      border-color: #35c99a;
+      box-shadow: 0 0 0 4px rgba(53,201,154,.13);
+    }
+    input[type="date"] { color-scheme: dark; }
+    button { color: #eaf2f8; }
+    .btn, .login-btn, .csv-btn {
+      color: #071711;
+      background: linear-gradient(135deg, #54e0b0, #20b889);
+      box-shadow: 0 7px 20px rgba(32,184,137,.19);
+    }
+    .signup-btn, .backup-btn, .expense-add {
+      color: #eaf2f8;
+      background: linear-gradient(135deg, #2b3c52, #1c2a3c);
+      border: 1px solid #3a4c63;
+    }
+    .logout-btn { color: #c3cfdd; background: #263346; }
+    .restore-btn { color: #a9caff; background: #1b2c43; }
+    .analytics-card { background: #111b28; box-shadow: none; }
+    .analytics-note { color: #899bb0; }
+    .bar-track, .weekday-track { background: #2a3748; }
+    .bar-fill { background: linear-gradient(90deg, #55dfb1, #20b889); }
+    .bar-fill.coupang { background: linear-gradient(90deg, #86aaff, #527fe0); }
+    .weekday-fill { background: linear-gradient(90deg, #55dfb1, #20b889); }
+    .weekday-best { background: #142e2a; border-color: #245b4b; }
+    .expense-total { color: #ff8f87; }
+    table { color: #dce6ef; }
+    th, td { border-bottom-color: #2a3748; }
+    th {
+      color: #aebdce;
+      background: #202c3b;
+    }
+    td { color: #d0dbe6; }
+    .delete-btn { color: #ffaaa4; background: #3a252b; }
+    .expense-empty { color: #91a0b2; }
+    .chart-wrap, canvas { background: transparent; }
+    :focus-visible { outline-color: rgba(67,214,165,.55); }
+    ::selection { color: #06150f; background: #58dcb0; }
+    @media (max-width: 750px) {
+      header { background: linear-gradient(145deg, #182536, #121c29); }
+      .card, .panel, .history, .auth-panel, .expense-panel,
+      .analytics-card, .chart-panel { box-shadow: 0 10px 26px rgba(0,0,0,.2); }
+    }
+
   </style>
 </head>
 
@@ -1486,8 +1584,8 @@
     const plotH = height - top - bottom;
 
     ctx.font = "11px Arial";
-    ctx.fillStyle = "#7b8491";
-    ctx.strokeStyle = "#e9edf2";
+    ctx.fillStyle = "#9aaabd";
+    ctx.strokeStyle = "#2b394b";
     ctx.lineWidth = 1;
 
     for (let i = 0; i <= 4; i++) {
