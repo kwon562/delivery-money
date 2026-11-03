@@ -1541,12 +1541,44 @@
     .app-main>header .header-brand::before{content:none!important;display:none!important}
     .app-main>header{padding:22px 24px 24px!important}
     @media(max-width:850px){.app-main>header{padding:18px 18px 20px!important}}
+
+    /* Hover/focus analytics flyout and separate daily, weekly and monthly views */
+    .analytics-nav-group{position:relative;min-width:0}
+    .analytics-nav-group>.app-nav-btn{width:100%}
+    .analytics-nav-chevron{margin-left:auto;font-size:16px}
+    .analytics-nav-submenu{display:none;position:absolute;left:calc(100% + 9px);top:0;
+      min-width:154px;padding:8px;background:#fff;border:1px solid #e1d8dc;border-radius:16px;
+      box-shadow:0 12px 30px #291d2922;z-index:100}
+    .analytics-nav-group:hover .analytics-nav-submenu,
+    .analytics-nav-group:focus-within .analytics-nav-submenu{display:grid;gap:5px}
+    .analytics-nav-submenu button{cursor:pointer;text-align:left;border:1px solid transparent;border-radius:999px;
+      padding:11px 14px;background:#fff;color:#29252a;font-weight:700;font-size:13px}
+    .analytics-nav-submenu button:hover,.analytics-nav-submenu button:focus-visible{
+      border-color:#bf1e36;color:#bf1e36;background:#fff}
+    .analytics-nav-submenu button.active{background:#bf1e36;color:#fff;border-color:#bf1e36}
+    .analytics-period-view{display:none;min-width:0}
+    .analytics-period-view.active{display:block}
+    .analytics-period-charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:20px}
+    .analytics-period-charts>.analytics-platform-wide{grid-column:1/-1}
+    .analytics-period-charts>.chart-panel{min-width:0}
+    .analytics-period-tabs{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 22px}
+    .analytics-period-tabs button{border:1.5px solid #d8d6d8;border-radius:999px;
+      background:#fff;color:#29252a;padding:10px 20px;font-weight:750;cursor:pointer}
+    .analytics-period-tabs button:hover{border-color:#bf1e36;color:#bf1e36}
+    .analytics-period-tabs button.active{background:#bf1e36;border-color:#bf1e36;color:#fff}
+    @media(max-width:850px){
+      .analytics-nav-submenu{left:auto;right:0;top:auto;bottom:calc(100% + 8px);min-width:148px}
+      .analytics-nav-group{min-width:0}
+      .analytics-nav-group .analytics-nav-chevron{display:none}
+      .analytics-period-charts{grid-template-columns:minmax(0,1fr)}
+    }
+    @media(max-width:650px){.analytics-period-tabs button{flex:1;padding:10px 12px}}
   </style>
 </head>
 
 <body>
 
-<div class="container app-shell"><aside class="app-sidebar" aria-label="주 메뉴"><div class="app-brand"><div class="brand-words"><span>DELIVERY MONEY</span><strong>배달머니</strong></div></div><nav class="app-nav" aria-label="화면 이동"><button type="button" class="app-nav-btn active" data-page="home" onclick="switchAppPage('home')"><span class="nav-icon">⌂</span>홈</button><button type="button" class="app-nav-btn" data-page="records" onclick="switchAppPage('records')"><span class="nav-icon">✎</span>기록</button><button type="button" class="app-nav-btn" data-page="analytics" onclick="switchAppPage('analytics')"><span class="nav-icon">▥</span>분석</button><button type="button" class="app-nav-btn" data-page="expenses" onclick="switchAppPage('expenses')"><span class="nav-icon">▤</span>지출</button></nav><div class="app-sidebar-foot">수입부터 지출까지<br>한곳에서 간편하게 관리하세요.</div></aside><div class="app-main">  <header>
+<div class="container app-shell"><aside class="app-sidebar" aria-label="주 메뉴"><div class="app-brand"><div class="brand-words"><span>DELIVERY MONEY</span><strong>배달머니</strong></div></div><nav class="app-nav" aria-label="화면 이동"><button type="button" class="app-nav-btn active" data-page="home" onclick="switchAppPage('home')"><span class="nav-icon">⌂</span>홈</button><button type="button" class="app-nav-btn" data-page="records" onclick="switchAppPage('records')"><span class="nav-icon">✎</span>기록</button><div class="analytics-nav-group"><button type="button" class="app-nav-btn analytics-nav-parent" data-page="analytics" onclick="switchAppPage('analytics-day')" aria-haspopup="true" aria-label="분석 메뉴 펼치기"><span class="nav-icon">▥</span>분석 <span class="analytics-nav-chevron">⌄</span></button><div class="analytics-nav-submenu" aria-label="분석 기간 선택"><button type="button" data-analysis="day" onclick="switchAppPage('analytics-day')">일별 분석</button><button type="button" data-analysis="week" onclick="switchAppPage('analytics-week')">주별 분석</button><button type="button" data-analysis="month" onclick="switchAppPage('analytics-month')">월별 분석</button></div></div><button type="button" class="app-nav-btn" data-page="expenses" onclick="switchAppPage('expenses')"><span class="nav-icon">▤</span>지출</button></nav><div class="app-sidebar-foot">수입부터 지출까지<br>한곳에서 간편하게 관리하세요.</div></aside><div class="app-main">  <header>
     <div>
       <div class="logo header-brand"><span class="brand-mark" aria-hidden="true"><span class="brand-monogram">D<span class="brand-arrow">➜</span></span></span><span>DELIVERY MONEY</span></div>
       <div class="subtitle">나의 배달 수익 관리 대시보드</div>
@@ -1724,7 +1756,7 @@
 
   </div>
 
-</section><section class="app-page" id="page-analytics" aria-label="수익 분석"><div class="page-intro"><div class="eyebrow">INSIGHTS</div><h1>수익 분석</h1><p>플랫폼과 기간별 수익 흐름을 살펴보세요.</p></div>  <section class="analytics-section">
+</section><section class="app-page" id="page-analytics" aria-label="수익 분석"><div class="page-intro"><div class="eyebrow">INSIGHTS</div><h1 id="analysisPeriodTitle">일별 수익 분석</h1><p id="analysisPeriodDescription">선택한 날짜의 플랫폼별 수입과 순수익을 확인하세요.</p></div><div class="analytics-period-tabs" aria-label="분석 기간"><button type="button" data-period="day" onclick="switchAppPage('analytics-day')">일별</button><button type="button" data-period="week" onclick="switchAppPage('analytics-week')">주별</button><button type="button" data-period="month" onclick="switchAppPage('analytics-month')">월별</button></div><div class="analytics-period-view" id="analysis-day"></div><div class="analytics-period-view" id="analysis-week"></div><div class="analytics-period-view" id="analysis-month"></div>  <section class="analytics-section" id="analyticsLegacySection">
     <h2 class="section-title">📈 기간별 수익 분석</h2>
     <div class="analytics-grid">
       <div class="analytics-card"><div class="label">이번 주 순수익</div><div class="value green" id="weekNet">0원</div></div>
@@ -1870,18 +1902,73 @@
 </div></div>
 
 <script>
+  function initializeAnalysisViews(){
+    const section=document.getElementById('analyticsLegacySection');
+    if(!section||section.dataset.split==='yes')return;
+    section.dataset.split='yes';
+    const day=document.getElementById('analysis-day');
+    const week=document.getElementById('analysis-week');
+    const month=document.getElementById('analysis-month');
+    const summary=section.querySelector(':scope > .analytics-grid');
+    const compact=section.querySelector('.analytics-compact-grid');
+    const panels=Array.from(compact.children);
+    const weeklySummary=document.createElement('div');
+    weeklySummary.className='analytics-grid';
+    const monthlySummary=document.createElement('div');
+    monthlySummary.className='analytics-grid';
+    const cards=Array.from(summary.children);
+    cards.slice(0,2).forEach(el=>weeklySummary.appendChild(el));
+    cards.slice(2).forEach(el=>monthlySummary.appendChild(el));
+    const dayDetails=document.querySelector('#page-analytics > .content-grid');
+    const dayHeading=document.createElement('h2');
+    dayHeading.className='section-title';
+    dayHeading.textContent='선택한 날짜의 수익';
+    day.append(dayHeading,dayDetails);
+    const weekHeading=document.createElement('h2');
+    weekHeading.className='section-title';
+    weekHeading.textContent='이번 주 수익 현황';
+    const weekPanels=document.createElement('div');
+    weekPanels.className='analytics-period-charts';
+    [panels[1],panels[3]].forEach(el=>weekPanels.appendChild(el));
+    week.append(weekHeading,weeklySummary,weekPanels);
+    const monthHeading=document.createElement('h2');
+    monthHeading.className='section-title';
+    monthHeading.textContent='이번 달 수익 현황';
+    const monthPanels=document.createElement('div');
+    monthPanels.className='analytics-period-charts';
+    [panels[0],panels[2],panels[4]].forEach(el=>monthPanels.appendChild(el));
+    month.append(monthHeading,monthlySummary,monthPanels);
+    section.remove();
+  }
   function switchAppPage(page){
-    if(!['home','records','analytics','expenses'].includes(page)) page='home';
-    document.querySelectorAll('.app-page').forEach(el=>el.classList.toggle('active',el.id==='page-'+page));
+    const valid=['home','records','expenses','analytics','analytics-day','analytics-week','analytics-month'];
+    if(!valid.includes(page))page='home';
+    if(page==='analytics')page='analytics-day';
+    const analytics=page.startsWith('analytics-');
+    const period=analytics?page.slice('analytics-'.length):'day';
+    const mainPage=analytics?'analytics':page;
+    document.querySelectorAll('.app-page').forEach(el=>el.classList.toggle('active',el.id==='page-'+mainPage));
     document.querySelectorAll('.app-nav-btn').forEach(el=>{
-      const selected=el.dataset.page===page;
+      const selected=el.dataset.page===mainPage;
       el.classList.toggle('active',selected);
       if(selected)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');
     });
+    document.querySelectorAll('.analytics-period-view').forEach(el=>el.classList.toggle('active',analytics&&el.id==='analysis-'+period));
+    document.querySelectorAll('[data-analysis],[data-period]').forEach(el=>{
+      const selected=(el.dataset.analysis||el.dataset.period)===period&&analytics;
+      el.classList.toggle('active',selected);
+      if(selected)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');
+    });
+    if(analytics){
+      const labels={day:['일별 수익 분석','선택한 날짜의 플랫폼별 수입과 순수익을 확인하세요.'],week:['주별 수익 분석','이번 주 수익과 최근 7일 추이를 살펴보세요.'],month:['월별 수익 분석','월간 플랫폼 수입과 목표 달성 현황을 확인하세요.']};
+      document.getElementById('analysisPeriodTitle').textContent=labels[period][0];
+      document.getElementById('analysisPeriodDescription').textContent=labels[period][1];
+    }
     if(location.hash!=='#'+page)history.replaceState(null,'','#'+page);
     window.scrollTo({top:0,behavior:'instant'});
-    if(page==='analytics'&&typeof updateAnalytics==='function')updateAnalytics();
+    if(analytics&&typeof updateAnalytics==='function')updateAnalytics();
   }
+  initializeAnalysisViews();
   window.addEventListener('hashchange',()=>switchAppPage(location.hash.slice(1)||'home'));
   switchAppPage(location.hash.slice(1)||'home');
 </script>
