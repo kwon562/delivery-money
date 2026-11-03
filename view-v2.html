@@ -1298,6 +1298,37 @@
         grid-template-columns:minmax(0,1fr)!important;
       }
     }
+
+    /* Warm, low-glare light theme: soft beige canvas and ivory surfaces */
+    body:not(.dark-mode){background:#eee9df!important;color:#342f2a!important}
+    body:not(.dark-mode) .app-sidebar{background:#e4ded2!important;border-color:#d6cdbf!important;box-shadow:0 12px 35px #6a574b12!important}
+    body:not(.dark-mode) .app-main>header{border-bottom-color:#d9d0c4}
+    body:not(.dark-mode) .app-page .monthly-overview,
+    body:not(.dark-mode) .app-page .card,
+    body:not(.dark-mode) .app-page .analytics-card,
+    body:not(.dark-mode) .app-page .chart-panel,
+    body:not(.dark-mode) .app-page .panel,
+    body:not(.dark-mode) .app-page .history,
+    body:not(.dark-mode) .app-page .expense-panel,
+    body:not(.dark-mode) .app-page .platform-input-card,
+    body:not(.dark-mode) .auth-panel{
+      background:#f8f4ec!important;border:1px solid #dfd5c7!important;
+      box-shadow:0 7px 24px #74614c0d!important;color:#342f2a!important
+    }
+    body:not(.dark-mode) .app-page h1,body:not(.dark-mode) .app-page h2,
+    body:not(.dark-mode) .app-page h3,body:not(.dark-mode) .app-page .card-value,
+    body:not(.dark-mode) .app-page .analytics-card .value{color:#342f2a}
+    body:not(.dark-mode) .app-page .page-intro p,
+    body:not(.dark-mode) .app-page .card-label,
+    body:not(.dark-mode) .app-page .analytics-card .label{color:#776c60}
+    body:not(.dark-mode) input,body:not(.dark-mode) select,body:not(.dark-mode) textarea{
+      background:#f3eee5!important;border-color:#d9cebf!important;color:#39332e!important
+    }
+    body:not(.dark-mode) .big-calendar{background:#f5f0e7!important;border-color:#dfd5c7!important}
+    body:not(.dark-mode) th{background:#eae3d8!important;color:#554b40!important}
+    body:not(.dark-mode) td{background:#f8f4ec!important;border-color:#e2d9cd!important}
+    body:not(.dark-mode) .theme-toggle{background:#e8dfd2;color:#64503e;border-color:#d5c5b3}
+    body:not(.dark-mode) .app-nav-btn.active{background:#d5e8d9;color:#28684f;border-color:#b7d3bd}
   </style>
 </head>
 
