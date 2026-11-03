@@ -1767,6 +1767,26 @@
     /* Text-only controls: remove decorative emoji styling while keeping actions */
     .theme-toggle{display:inline-flex;align-items:center;justify-content:center;gap:0!important}
     #page-records .history .tools button{font-family:inherit!important;letter-spacing:0!important}
+
+    /* More breathing room in analytics: consistent left/right inset */
+    #page-analytics{padding:0 18px 24px!important;box-sizing:border-box!important}
+    #page-analytics .page-intro{padding:0 4px!important}
+    #page-analytics .analytics-period-tabs{padding:0 4px!important}
+    #page-analytics .analytics-period-view>.section-title{margin-left:4px!important;margin-right:4px!important}
+    #page-analytics .analytics-period-view>.content-grid{margin:16px 4px 0!important}
+    #page-analytics .analytics-period-view .panel{padding:28px 32px!important;min-width:0!important}
+    #page-analytics .analytics-period-view .panel>.card-label{margin-top:15px!important}
+    #page-analytics .analytics-period-view .panel>.card-value{padding:0 0 14px!important}
+    #page-analytics .analytics-period-view>.analytics-grid{margin:14px 4px!important}
+    #page-analytics .analytics-period-charts{margin-left:4px!important;margin-right:4px!important}
+    @media(max-width:850px){
+      #page-analytics{padding:0 10px 20px!important}
+      #page-analytics .analytics-period-view .panel{padding:22px 20px!important}
+    }
+    @media(max-width:480px){
+      #page-analytics{padding:0 4px 16px!important}
+      #page-analytics .analytics-period-view .panel{padding:20px 18px!important}
+    }
   </style>
 </head>
 
