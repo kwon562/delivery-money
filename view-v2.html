@@ -1615,12 +1615,18 @@
     @media(max-width:850px){
       .app-nav .analytics-nav-submenu{z-index:200!important}
     }
+
+    /* Simple analysis navigation: no hover flyout, period buttons live on analysis page */
+    .app-nav>.app-nav-btn[data-page="analytics"]{width:100%!important}
+    .analytics-nav-submenu{display:none!important}
+    .analytics-period-tabs{display:flex!important;align-items:center;gap:10px}
+    .analytics-period-tabs button{min-width:84px}
   </style>
 </head>
 
 <body>
 
-<div class="container app-shell"><aside class="app-sidebar" aria-label="주 메뉴"><div class="app-brand"><div class="brand-words"><span>DELIVERY MONEY</span><strong>배달머니</strong></div></div><nav class="app-nav" aria-label="화면 이동"><button type="button" class="app-nav-btn active" data-page="home" onclick="switchAppPage('home')"><span class="nav-icon">⌂</span>홈</button><button type="button" class="app-nav-btn" data-page="records" onclick="switchAppPage('records')"><span class="nav-icon">✎</span>기록</button><div class="analytics-nav-group"><button type="button" class="app-nav-btn analytics-nav-parent" data-page="analytics" onclick="switchAppPage('analytics-day')" aria-haspopup="true" aria-label="분석 메뉴 펼치기"><span class="nav-icon">▥</span>분석 <span class="analytics-nav-chevron">⌄</span></button><div class="analytics-nav-submenu" aria-label="분석 기간 선택"><button type="button" data-analysis="day" onclick="switchAppPage('analytics-day')">일별 분석</button><button type="button" data-analysis="week" onclick="switchAppPage('analytics-week')">주별 분석</button><button type="button" data-analysis="month" onclick="switchAppPage('analytics-month')">월별 분석</button></div></div><button type="button" class="app-nav-btn" data-page="expenses" onclick="switchAppPage('expenses')"><span class="nav-icon">▤</span>지출</button></nav><div class="app-sidebar-foot">수입부터 지출까지<br>한곳에서 간편하게 관리하세요.</div></aside><div class="app-main">  <header>
+<div class="container app-shell"><aside class="app-sidebar" aria-label="주 메뉴"><div class="app-brand"><div class="brand-words"><span>DELIVERY MONEY</span><strong>배달머니</strong></div></div><nav class="app-nav" aria-label="화면 이동"><button type="button" class="app-nav-btn active" data-page="home" onclick="switchAppPage('home')"><span class="nav-icon">⌂</span>홈</button><button type="button" class="app-nav-btn" data-page="records" onclick="switchAppPage('records')"><span class="nav-icon">✎</span>기록</button><button type="button" class="app-nav-btn" data-page="analytics" onclick="switchAppPage('analytics-day')"><span class="nav-icon">▥</span>분석</button><button type="button" class="app-nav-btn" data-page="expenses" onclick="switchAppPage('expenses')"><span class="nav-icon">▤</span>지출</button></nav><div class="app-sidebar-foot">수입부터 지출까지<br>한곳에서 간편하게 관리하세요.</div></aside><div class="app-main">  <header>
     <div>
       <div class="logo header-brand"><span class="brand-mark" aria-hidden="true"><span class="brand-monogram">D<span class="brand-arrow">➜</span></span></span><span>DELIVERY MONEY</span></div>
       <div class="subtitle">나의 배달 수익 관리 대시보드</div>
