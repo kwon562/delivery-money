@@ -907,6 +907,34 @@
     }
 
 
+    /* Monthly overview: larger figures and a centered, balanced goal chart */
+    .monthly-overview{padding:22px 26px 20px}
+    .monthly-overview h2{font-size:21px}
+    .monthly-overview-head p{font-size:13px}
+    .monthly-overview-main{grid-template-columns:minmax(0,0.8fr) minmax(0,1.2fr);max-width:990px;margin:22px auto 0;gap:38px;padding-bottom:22px}
+    .monthly-net-block span,.progress-heading span{font-size:15px}
+    .monthly-net-block strong{font-size:clamp(30px,3.5vw,42px)}
+    .monthly-net-block small{font-size:13px}
+    .progress-heading strong{font-size:20px}
+    .overview-progress-track{height:24px;margin:16px 0 13px}
+    .progress-foot{font-size:12px}
+    .monthly-overview-stats{padding-top:17px;gap:18px}
+    .monthly-overview-stats span{font-size:13px}
+    .monthly-overview-stats strong{font-size:17px}
+    @media(max-width:750px){
+      .monthly-overview{padding:17px 16px}
+      .monthly-overview-main{grid-template-columns:minmax(0,0.8fr) minmax(0,1.2fr);gap:15px;margin-top:17px;padding-bottom:17px}
+      .monthly-net-block span,.progress-heading span{font-size:12px}
+      .monthly-net-block strong{font-size:clamp(23px,4vw,30px)}
+      .monthly-net-block small,.progress-foot{font-size:11px}
+      .progress-heading strong{font-size:16px}
+      .monthly-overview-stats span{font-size:11px}
+      .monthly-overview-stats strong{font-size:14px}
+    }
+    @media(max-width:520px){
+      .monthly-overview-main{grid-template-columns:1fr;gap:17px}
+      .monthly-overview-stats{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:14px}
+    }
     /* 넓은 기록 입력 영역과 큰 날짜 선택 달력 */
     .entry-panel{margin:18px 0 24px;padding:24px;max-width:none}
     .entry-panel .section-title{margin-top:0}
