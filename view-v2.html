@@ -987,6 +987,39 @@
     @media(min-width:701px){
       .analytics-section>.chart-panel:last-child:nth-child(odd){grid-column:1/-1}
     }
+
+    /* 분석 카드 레이아웃 복구: 기존의 상충하는 grid-column 규칙보다 우선 적용 */
+    .analytics-section{
+      display:grid;
+      grid-template-columns:minmax(0,1fr);
+      align-items:stretch;
+      gap:14px;
+    }
+    .analytics-section > .section-title,
+    .analytics-section > .analytics-grid,
+    .analytics-section > .chart-panel,
+    .analytics-section > .chart-panel:nth-of-type(2),
+    .analytics-section > .chart-panel:last-child,
+    .analytics-section > .chart-panel:last-child:nth-child(odd){
+      grid-column:1 / -1;
+      min-width:0;
+    }
+    .analytics-section > .chart-panel{margin-top:0;height:auto}
+    .analytics-section > .chart-panel .platform-bars{max-width:none}
+    @media(min-width:900px){
+      .analytics-section{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        align-items:start;
+      }
+      .analytics-section > .section-title,
+      .analytics-section > .analytics-grid{grid-column:1 / -1}
+      .analytics-section > .chart-panel,
+      .analytics-section > .chart-panel:nth-of-type(2),
+      .analytics-section > .chart-panel:last-child,
+      .analytics-section > .chart-panel:last-child:nth-child(odd){grid-column:auto}
+      .analytics-section > .chart-panel:nth-of-type(2){grid-column:1 / -1}
+      .analytics-section > .chart-panel:last-child{grid-column:1 / -1}
+    }
   </style>
 </head>
 
