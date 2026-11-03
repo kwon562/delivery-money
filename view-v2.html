@@ -1086,10 +1086,45 @@
     .platform-month-nav button{width:38px;height:38px;border:1px solid #d6e3dc;border-radius:9px;background:#f2f8f5;color:#176c51;font-size:26px;cursor:pointer}
     .platform-month-nav button:hover{background:#e1f1e8}
     @media(max-width:600px){.platform-month-header{justify-content:center}.platform-month-header h3{width:100%;text-align:center}}
+
+    /* Dark mode: accessible surfaces and contrast across all dashboard sections */
+    body.dark-mode{background:#0b111b;color:#e7edf6;color-scheme:dark}
+    body.dark-mode .subtitle,body.dark-mode .date{color:#aab8cc}
+    body.dark-mode .auth-panel,body.dark-mode .panel,body.dark-mode .entry-panel,body.dark-mode .history,body.dark-mode .expense-panel,
+    body.dark-mode .monthly-overview,body.dark-mode .card,body.dark-mode .analytics-card,body.dark-mode .chart-panel,
+    body.dark-mode .platform-input-card,body.dark-mode .big-calendar{background:#161f2e!important;border-color:#303d51!important;box-shadow:none!important;color:#e7edf6}
+    body.dark-mode .section-title,body.dark-mode h2,body.dark-mode h3,body.dark-mode .monthly-overview h2,
+    body.dark-mode .card-value,body.dark-mode .analytics-card .value,body.dark-mode .monthly-overview-stats strong,
+    body.dark-mode .progress-heading strong,body.dark-mode .platform-month-nav strong{color:#f0f5ff}
+    body.dark-mode .monthly-net-block strong,body.dark-mode .green{color:#4ce2b4!important}
+    body.dark-mode p,body.dark-mode label,body.dark-mode small,body.dark-mode .card-label,
+    body.dark-mode .analytics-card .label,body.dark-mode .monthly-net-block span,body.dark-mode .monthly-net-block small,
+    body.dark-mode .progress-heading span,body.dark-mode .progress-foot,body.dark-mode .monthly-overview-stats span,
+    body.dark-mode .analytics-note,body.dark-mode .expense-empty{color:#aebdd0!important}
+    body.dark-mode input,body.dark-mode select,body.dark-mode textarea{background:#0e1725!important;color:#f2f6fd!important;border:1px solid #3a4b61!important;color-scheme:dark}
+    body.dark-mode input::placeholder,body.dark-mode textarea::placeholder{color:#8192a8}
+    body.dark-mode .overview-progress-track,body.dark-mode .bar-track,body.dark-mode .monthly-trend-track{background:#344357!important}
+    body.dark-mode .monthly-overview-main{border-color:#334154}
+    body.dark-mode .monthly-overview-chip{background:#123a32;color:#6df0c3;border-color:#276858}
+    body.dark-mode .platform-month-nav button,body.dark-mode .date-step-btn,body.dark-mode .calendar-nav button,
+    body.dark-mode .hours-picker button,body.dark-mode .hours-adjust button,body.dark-mode .record-month-controls button,
+    body.dark-mode .calendar-days button{background:#243349;color:#e7edf6;border-color:#3a4d63}
+    body.dark-mode .platform-month-nav button:hover,body.dark-mode .date-step-btn:hover,body.dark-mode .calendar-nav button:hover{background:#34475e}
+    body.dark-mode .calendar-days button.selected,body.dark-mode .hours-picker button.active{background:#0c8165!important;color:#fff!important}
+    body.dark-mode table{background:transparent;color:#e7edf6}
+    body.dark-mode th{background:#253448!important;color:#c8d6e8!important;border-color:#36485d!important}
+    body.dark-mode td{background:#161f2e!important;color:#dce7f4!important;border-color:#303d51!important}
+    body.dark-mode tr:hover td{background:#1e2b3d!important}
+    body.dark-mode .monthly-overview .eyebrow{color:#50e0b4}
+    body.dark-mode .expense-total{color:#4ce2b4}
+    .theme-toggle{border:1px solid #b9d5cc;border-radius:10px;background:#edf8f3;color:#14664f;padding:9px 13px;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap}
+    body.dark-mode .theme-toggle{background:#22364b;border-color:#426077;color:#e8f4ff}
+    .header-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+    @media(max-width:600px){.header-actions{gap:7px}.theme-toggle{padding:9px 10px;font-size:12px}}
   </style>
 </head>
 
-<body>
+<body class="dark-mode">
 
 <div class="container">
 
@@ -1098,7 +1133,7 @@
       <div class="logo">DELIVERY MONEY</div>
       <div class="subtitle">나의 배달 수익 관리 대시보드</div>
     </div>
-    <div class="date" id="today"></div>
+    <div class="header-actions"><div class="date" id="today"></div><button type="button" class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="화면 테마 변경">☀️ 라이트 모드</button></div>
   </header>
 
   <!-- 로그인 영역 -->
@@ -1424,6 +1459,19 @@
 
 <script>
 
+
+  function applyTheme(mode) {
+    const dark = mode !== "light";
+    document.body.classList.toggle("dark-mode", dark);
+    document.getElementById("themeToggle").textContent = dark ? "☀️ 라이트 모드" : "🌙 다크 모드";
+    document.querySelector('meta[name="theme-color"]').setAttribute("content", dark ? "#0b111b" : "#f5f7fb");
+  }
+  function toggleTheme() {
+    const next = document.body.classList.contains("dark-mode") ? "light" : "dark";
+    localStorage.setItem("deliveryMoneyTheme", next);
+    applyTheme(next);
+  }
+  applyTheme(localStorage.getItem("deliveryMoneyTheme") || "dark");
 
   // 모바일에서도 날짜를 쉽게 고를 수 있는 넓은 달력
   let calendarViewMonth = new Date();
