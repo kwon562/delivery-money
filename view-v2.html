@@ -952,6 +952,15 @@
     .auth-panel .logout-btn{margin-top:0!important;padding:8px 12px;min-height:36px}
     .auth-panel .auth-status,.auth-panel .sync-status{font-size:11px;line-height:1.35;margin-top:5px}
     @media(max-width:480px){.auth-panel{padding:11px 12px}.auth-fields{gap:7px}.auth-fields input{font-size:13px;padding:9px 7px}.auth-panel .auth-buttons button{font-size:13px}}
+
+    .hours-picker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:9px 0 12px}
+    .hours-picker button{padding:13px 5px;background:#f2f6f4;border:1px solid #dbe6e0;color:#33483e;border-radius:10px;min-height:46px}
+    .hours-picker button.active{background:#138565;color:white;border-color:#138565}
+    .hours-adjust{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+    .hours-adjust>button{flex:1;background:#eaf3ef;color:#146a50;min-height:44px}
+    .hours-selected{flex:1.3;text-align:center;font-size:12px;color:#52645c}
+    .hours-selected strong{display:block;font-size:19px;color:#137b5e;margin-top:3px}
+    @media(max-width:420px){.hours-picker{gap:5px}.hours-picker button{font-size:13px;padding:11px 3px}.hours-adjust{gap:5px}.hours-adjust>button{padding:10px 5px;font-size:12px}.hours-selected strong{font-size:17px}}
   </style>
 </head>
 
@@ -1055,8 +1064,23 @@
         </section>
       </div>
 
-      <label>오늘 운행 시간 (시간)</label>
-      <input type="number" id="hours" placeholder="예: 5" min="0" step="0.5">
+      <label for="hours">오늘 운행 시간</label>
+      <div class="hours-picker" id="hoursPicker" role="group" aria-label="운행 시간 선택">
+        <button type="button" data-hours="0.5" onclick="selectHours(0.5)">30분</button>
+        <button type="button" data-hours="1" onclick="selectHours(1)">1시간</button>
+        <button type="button" data-hours="2" onclick="selectHours(2)">2시간</button>
+        <button type="button" data-hours="3" onclick="selectHours(3)">3시간</button>
+        <button type="button" data-hours="4" onclick="selectHours(4)">4시간</button>
+        <button type="button" data-hours="5" onclick="selectHours(5)">5시간</button>
+        <button type="button" data-hours="6" onclick="selectHours(6)">6시간</button>
+        <button type="button" data-hours="8" onclick="selectHours(8)">8시간</button>
+      </div>
+      <div class="hours-adjust">
+        <button type="button" onclick="adjustHours(-0.5)" aria-label="운행 시간 30분 줄이기">− 30분</button>
+        <div class="hours-selected">선택 시간 <strong id="hoursDisplay">0시간</strong></div>
+        <button type="button" onclick="adjustHours(0.5)" aria-label="운행 시간 30분 늘리기">+ 30분</button>
+      </div>
+      <input type="hidden" id="hours" value="0">
 
       <label>기타 지출 (원) · 상세 지출과 별도</label>
       <input type="number" id="expenses" placeholder="예: 8000" min="0">
@@ -1298,6 +1322,23 @@
       };
       grid.appendChild(button);
     }
+  }
+
+
+  // 버튼으로 운행 시간을 선택하고 30분 단위로 조절합니다.
+  function selectHours(value) {
+    const hours = Math.max(0, Math.round(Number(value) * 2) / 2);
+    document.getElementById("hours").value = hours;
+    document.getElementById("hoursDisplay").textContent =
+      Math.floor(hours) + "시간" + (hours % 1 ? " 30분" : "");
+    document.querySelectorAll("#hoursPicker button").forEach(button => {
+      const active = Number(button.dataset.hours) === hours;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+  }
+  function adjustHours(delta) {
+    selectHours(Number(document.getElementById("hours").value || 0) + delta);
   }
 
   // ==================================
@@ -2222,7 +2263,7 @@
     document.getElementById("baeminOrders").value = record.baeminOrders ?? 0;
     document.getElementById("coupang").value = record.coupang ?? 0;
     document.getElementById("coupangOrders").value = record.coupangOrders ?? 0;
-    document.getElementById("hours").value = record.hours ?? 0;
+    selectHours(record.hours ?? 0);
     const detailed = expenseItems.filter(x => x.delivery_date === date)
       .reduce((sum, x) => sum + Number(x.amount || 0), 0);
     document.getElementById("expenses").value = Math.max(0, Number(record.expenses || 0) - detailed);
