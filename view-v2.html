@@ -1621,6 +1621,20 @@
     .analytics-nav-submenu{display:none!important}
     .analytics-period-tabs{display:flex!important;align-items:center;gap:10px}
     .analytics-period-tabs button{min-width:84px}
+
+    /* Account status: aligned email and logout action on one row */
+    .auth-panel #userArea:not([style*="display:none"]):not([style*="display: none"]){
+      display:flex!important;align-items:center!important;justify-content:space-between!important;
+      gap:16px!important;flex-wrap:wrap!important;width:100%!important;min-width:0!important;
+    }
+    .auth-panel #userEmail{flex:1 1 210px!important;min-width:0!important;
+      font-size:13px!important;line-height:1.5!important;overflow-wrap:anywhere!important}
+    .auth-panel #userArea .logout-btn{flex:0 0 auto!important;min-height:38px!important;
+      margin:0!important;padding:9px 16px!important;border-radius:999px!important}
+    @media(max-width:480px){
+      .auth-panel #userArea:not([style*="display:none"]):not([style*="display: none"]){gap:10px!important}
+      .auth-panel #userEmail{flex-basis:100%!important}
+    }
   </style>
 </head>
 
