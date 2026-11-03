@@ -1254,7 +1254,7 @@
         <div class="analytics-card"><div class="label">지난달 대비</div><div class="value" id="monthChangeRate">-</div></div>
       </div>
       <div id="monthlyTrend" class="monthly-trend" aria-label="최근 6개월 순수익 비교"></div>
-      <div class="analytics-note">선택한 날짜가 속한 달과 이전 5개월의 순수익 합계입니다.</div>
+      <div class="analytics-note">현재 날짜가 속한 달과 이전 5개월의 순수익 합계입니다.</div>
     </div>
     <div class="chart-panel">
       <h3 style="margin:0 0 12px;font-size:16px;">요일별 수익 분석</h3>
@@ -1310,20 +1310,6 @@
     </div>
 
   </div>
-
-  <section class="expense-panel">
-    <h2 class="section-title">💳 지출 상세 관리</h2>
-    <p style="color:#777;font-size:13px;margin-top:-5px;">선택한 날짜의 지출을 항목별로 기록합니다. 등록한 지출은 총지출과 순수익에 자동 반영됩니다.</p>
-    <div class="expense-form">
-      <div><label for="expenseCategory">지출 항목</label><select id="expenseCategory" style="width:100%;padding:13px;border:1px solid #ddd;border-radius:9px;font-size:15px;"><option>유류비</option><option>식비</option><option>오토바이 정비비</option><option>보험료</option><option>통신비</option><option>주차·통행료</option><option>장비·용품</option><option>기타</option></select></div>
-      <div><label for="expenseAmount">금액 (원)</label><input id="expenseAmount" type="number" min="1" placeholder="예: 8000"></div>
-      <div class="full"><label for="expenseMemo">메모</label><input id="expenseMemo" type="text" maxlength="100" placeholder="예: 휘발유 주유"></div>
-    </div>
-    <button class="expense-add" onclick="addExpense()">+ 지출 내역 등록</button>
-    <h3 style="font-size:15px;margin:22px 0 6px;">선택한 날짜의 지출 합계</h3>
-    <div class="expense-total" id="expenseTotal">0원</div>
-    <div class="expense-list-wrap"><table class="expense-list"><thead><tr><th>항목</th><th>금액</th><th>메모</th><th>관리</th></tr></thead><tbody id="expenseList"><tr><td colspan="4" class="expense-empty">아직 등록된 지출이 없습니다.</td></tr></tbody></table></div>
-  </section>
 
   <!-- 기록 내역 -->
   <div class="history">
@@ -1383,6 +1369,21 @@
     </div>
 
   </div>
+
+  <section class="expense-panel">
+    <h2 class="section-title">💳 지출 상세 관리</h2>
+    <p style="color:#777;font-size:13px;margin-top:-5px;">선택한 날짜의 지출을 항목별로 기록합니다. 등록한 지출은 총지출과 순수익에 자동 반영됩니다.</p>
+    <div class="expense-form">
+      <div><label for="expenseCategory">지출 항목</label><select id="expenseCategory" style="width:100%;padding:13px;border:1px solid #ddd;border-radius:9px;font-size:15px;"><option>유류비</option><option>식비</option><option>오토바이 정비비</option><option>보험료</option><option>통신비</option><option>주차·통행료</option><option>장비·용품</option><option>기타</option></select></div>
+      <div><label for="expenseAmount">금액 (원)</label><input id="expenseAmount" type="number" min="1" placeholder="예: 8000"></div>
+      <div class="full"><label for="expenseMemo">메모</label><input id="expenseMemo" type="text" maxlength="100" placeholder="예: 휘발유 주유"></div>
+    </div>
+    <button class="expense-add" onclick="addExpense()">+ 지출 내역 등록</button>
+    <h3 style="font-size:15px;margin:22px 0 6px;">선택한 날짜의 지출 합계</h3>
+    <div class="expense-total" id="expenseTotal">0원</div>
+    <div class="expense-list-wrap"><table class="expense-list"><thead><tr><th>항목</th><th>금액</th><th>메모</th><th>관리</th></tr></thead><tbody id="expenseList"><tr><td colspan="4" class="expense-empty">아직 등록된 지출이 없습니다.</td></tr></tbody></table></div>
+  </section>
+
 
 </div>
 
@@ -2027,7 +2028,7 @@
     document.getElementById("baeminBar").style.width = (bm / max * 100) + "%";
     document.getElementById("coupangBar").style.width = (cp / max * 100) + "%";
     drawWeekdayAnalysis();
-    drawMonthlyTrend(monthKey);
+    drawMonthlyTrend(new Date().toLocaleDateString("sv-SE").slice(0, 7));
     drawMonthlyProjection(monthKey, monthNet);
     drawIncomeChart(selected);
   }
