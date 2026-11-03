@@ -2088,6 +2088,14 @@
 
       const actionCell = document.createElement("td");
 
+      const editButton = document.createElement("button");
+      editButton.className = "delete-btn";
+      editButton.style.background = "#167d61";
+      editButton.style.marginRight = "6px";
+      editButton.textContent = "수정";
+      editButton.onclick = () => editRecord(r.date);
+      actionCell.appendChild(editButton);
+
       const deleteButton = document.createElement("button");
 
       deleteButton.className = "delete-btn";
@@ -2102,6 +2110,33 @@
 
     });
 
+  }
+
+  // 저장된 날짜의 기록을 입력란에 불러와 수정할 수 있도록 합니다.
+  function editRecord(date) {
+    const record = records.find(r => r.date === date);
+    if (!record) {
+      alert("수정할 기록을 찾지 못했습니다.");
+      return;
+    }
+    document.getElementById("date").value = record.date;
+    document.getElementById("baemin").value = record.baemin ?? 0;
+    document.getElementById("baeminOrders").value = record.baeminOrders ?? 0;
+    document.getElementById("coupang").value = record.coupang ?? 0;
+    document.getElementById("coupangOrders").value = record.coupangOrders ?? 0;
+    document.getElementById("hours").value = record.hours ?? 0;
+    const detailed = expenseItems.filter(x => x.delivery_date === date)
+      .reduce((sum, x) => sum + Number(x.amount || 0), 0);
+    document.getElementById("expenses").value = Math.max(0, Number(record.expenses || 0) - detailed);
+    document.getElementById("date").dispatchEvent(new Event("change"));
+    // 날짜 변경 처리 후에도 기존 수입·근무시간을 입력란에 유지합니다.
+    document.getElementById("baemin").value = record.baemin ?? 0;
+    document.getElementById("baeminOrders").value = record.baeminOrders ?? 0;
+    document.getElementById("coupang").value = record.coupang ?? 0;
+    document.getElementById("coupangOrders").value = record.coupangOrders ?? 0;
+    document.getElementById("hours").value = record.hours ?? 0;
+    document.getElementById("expenses").value = Math.max(0, Number(record.expenses || 0) - detailed);
+    document.getElementById("date").closest(".panel").scrollIntoView({behavior:"smooth",block:"start"});
   }
 
   // ==================================
