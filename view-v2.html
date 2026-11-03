@@ -1722,6 +1722,24 @@
       .brand-monogram-premium{font-size:20px!important}
       .header-brand>span:last-child{font-size:17px!important}
     }
+
+    /* Information hierarchy: avoid repeating monthly net and reduce visual clutter */
+    #page-analytics .redundant-metric{display:none!important}
+    #page-analytics #analysis-month>.analytics-grid{
+      display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:12px!important;
+      max-width:560px
+    }
+    #page-home .dashboard{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important}
+    #page-home .dashboard .card{padding:19px 20px!important;min-width:0!important}
+    #page-home .dashboard .card-label{font-size:12px!important;font-weight:650!important;letter-spacing:0!important}
+    #page-home .dashboard .card-value{font-size:clamp(18px,2vw,25px)!important;line-height:1.3!important;letter-spacing:-.5px!important}
+    #page-home .monthly-overview-stats{border-top:1px solid #e8e2e5!important}
+    #page-home .monthly-overview-stats>div{min-width:0}
+    #page-home .monthly-overview-stats span{font-size:12px!important}
+    @media(max-width:1050px){#page-home .dashboard{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+    @media(max-width:540px){#page-home .dashboard{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+      #page-home .dashboard .card{padding:14px!important}
+      #page-home .dashboard .card-value{font-size:18px!important}}
   </style>
 </head>
 
@@ -1770,22 +1788,22 @@
   <div class="dashboard">
 
     <div class="card">
-      <div class="card-label">오늘 총수입</div>
+      <div class="card-label">총수입</div>
       <div class="card-value green" id="totalIncome">0원</div>
     </div>
 
     <div class="card">
-      <div class="card-label">오늘 순수익</div>
+      <div class="card-label">순수익</div>
       <div class="card-value" id="netIncome">0원</div>
     </div>
 
     <div class="card">
-      <div class="card-label">오늘 배달 건수</div>
+      <div class="card-label">배달 건수</div>
       <div class="card-value" id="totalOrders">0건</div>
     </div>
 
     <div class="card">
-      <div class="card-label">시간당 순수익</div>
+      <div class="card-label">시간당 평균</div>
       <div class="card-value" id="hourlyIncome">0원</div>
     </div>
 
@@ -1910,8 +1928,8 @@
     <div class="analytics-grid">
       <div class="analytics-card"><div class="label">이번 주 순수익</div><div class="value green" id="weekNet">0원</div></div>
       <div class="analytics-card"><div class="label">이번 주 배달 건수</div><div class="value" id="weekOrders">0건</div></div>
-      <div class="analytics-card"><div class="label">이번 달 순수익</div><div class="value green" id="monthNet">0원</div></div>
-      <div class="analytics-card"><div class="label">이번 달 시간당 순수익</div><div class="value" id="monthHourly">0원</div></div>
+      <div class="analytics-card redundant-metric"><div class="label">이번 달 순수익</div><div class="value green" id="monthNet">0원</div></div>
+      <div class="analytics-card"><div class="label">시간당 평균 순수익</div><div class="value" id="monthHourly">0원</div></div>
     </div>
     <div class="analytics-compact-grid">
       <div class="analytics-platform-wide">
