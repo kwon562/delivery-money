@@ -1848,6 +1848,11 @@
 
     }
 
+    // 저장 완료 후 입력란만 초기화합니다. 선택 날짜와 저장된 기록은 유지합니다.
+    ["baemin", "baeminOrders", "coupang", "coupangOrders", "expenses"].forEach(id => {
+      document.getElementById(id).value = "";
+    });
+    selectHours(0);
     alert("배달 기록이 저장되었습니다!");
 
   }
