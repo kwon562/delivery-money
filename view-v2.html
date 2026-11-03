@@ -1512,14 +1512,25 @@
     body.dark-mode .app-brand .brand-words strong{color:#f3edf1}
     body.dark-mode .app-brand .brand-words>span{color:#ff859a!important}
     @media(max-width:850px){.header-brand .brand-mark{width:35px;height:35px;border-radius:11px}.header-brand .brand-mark svg{width:23px;height:23px}}
+
+    /* Remove legacy green currency pseudo-logo and show monogram reliably */
+    .logo.header-brand::before,.header-brand::before{content:none!important;display:none!important}
+    .brand-mark{position:relative;overflow:hidden;background:#bf1e36!important;color:#fff!important}
+    .brand-monogram{position:relative;display:inline-flex;align-items:center;justify-content:center;
+      width:100%;height:100%;font-family:Arial,sans-serif;font-size:28px;font-weight:900;
+      line-height:1;letter-spacing:-2px;color:#fff!important}
+    .brand-arrow{position:absolute;right:6px;top:50%;transform:translateY(-47%);
+      font-size:15px;font-weight:900;letter-spacing:0;color:#fff!important}
+    .header-brand .brand-monogram{font-size:24px}
+    .header-brand .brand-arrow{font-size:13px;right:5px}
   </style>
 </head>
 
 <body>
 
-<div class="container app-shell"><aside class="app-sidebar" aria-label="주 메뉴"><div class="app-brand"><div class="brand-lockup"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 11H23C32 11 37 16.5 37 24S32 37 23 37H12V11Z" stroke="currentColor" stroke-width="4.2" stroke-linejoin="round"/><path d="M19 24H32M27 19L32 24L27 29" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div class="brand-words"><span>DELIVERY MONEY</span><strong>배달머니</strong></div></div></div><nav class="app-nav" aria-label="화면 이동"><button type="button" class="app-nav-btn active" data-page="home" onclick="switchAppPage('home')"><span class="nav-icon">⌂</span>홈</button><button type="button" class="app-nav-btn" data-page="records" onclick="switchAppPage('records')"><span class="nav-icon">✎</span>기록</button><button type="button" class="app-nav-btn" data-page="analytics" onclick="switchAppPage('analytics')"><span class="nav-icon">▥</span>분석</button><button type="button" class="app-nav-btn" data-page="expenses" onclick="switchAppPage('expenses')"><span class="nav-icon">▤</span>지출</button></nav><div class="app-sidebar-foot">수입부터 지출까지<br>한곳에서 간편하게 관리하세요.</div></aside><div class="app-main">  <header>
+<div class="container app-shell"><aside class="app-sidebar" aria-label="주 메뉴"><div class="app-brand"><div class="brand-lockup"><span class="brand-mark" aria-hidden="true"><span class="brand-monogram">D<span class="brand-arrow">➜</span></span></span><div class="brand-words"><span>DELIVERY MONEY</span><strong>배달머니</strong></div></div></div><nav class="app-nav" aria-label="화면 이동"><button type="button" class="app-nav-btn active" data-page="home" onclick="switchAppPage('home')"><span class="nav-icon">⌂</span>홈</button><button type="button" class="app-nav-btn" data-page="records" onclick="switchAppPage('records')"><span class="nav-icon">✎</span>기록</button><button type="button" class="app-nav-btn" data-page="analytics" onclick="switchAppPage('analytics')"><span class="nav-icon">▥</span>분석</button><button type="button" class="app-nav-btn" data-page="expenses" onclick="switchAppPage('expenses')"><span class="nav-icon">▤</span>지출</button></nav><div class="app-sidebar-foot">수입부터 지출까지<br>한곳에서 간편하게 관리하세요.</div></aside><div class="app-main">  <header>
     <div>
-      <div class="logo header-brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 11H23C32 11 37 16.5 37 24S32 37 23 37H12V11Z" stroke="currentColor" stroke-width="4.2" stroke-linejoin="round"/><path d="M19 24H32M27 19L32 24L27 29" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>DELIVERY MONEY</span></div>
+      <div class="logo header-brand"><span class="brand-mark" aria-hidden="true"><span class="brand-monogram">D<span class="brand-arrow">➜</span></span></span><span>DELIVERY MONEY</span></div>
       <div class="subtitle">나의 배달 수익 관리 대시보드</div>
     </div>
     <div class="header-actions"><div class="date" id="today"></div><button type="button" class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="화면 테마 변경">☀️ 라이트 모드</button></div>
