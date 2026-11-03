@@ -970,6 +970,23 @@
     #recordMonthDetails[hidden]{display:none}
     #recordMonthDetails{overflow-x:auto}
     @media(max-width:500px){.record-month-controls select{flex:1;min-width:0}.record-month-controls button{flex:1}.record-month-controls{gap:7px}}
+
+    /* 단일 수익 분석 카드를 전체 너비로 확장해 빈 오른쪽 칸 제거 */
+    .content-grid{grid-template-columns:minmax(0,1fr)}
+    .content-grid>.panel{width:100%}
+    .content-grid>.panel .card-value{margin-top:5px}
+    .content-grid>.panel br{display:none}
+    .content-grid>.panel .card-label{margin-top:13px}
+    .content-grid>.panel .card-label:first-of-type{margin-top:0}
+    .content-grid>.panel .card-value:not(:last-child){padding-bottom:11px;border-bottom:1px solid #edf0f3}
+    /* 수익 분석 카드의 세로 공백 최소화 */
+    .analytics-section{align-items:start}
+    .analytics-section>.chart-panel{min-width:0}
+    .weekday-list{gap:8px}
+    .weekday-row{gap:7px}
+    @media(min-width:701px){
+      .analytics-section>.chart-panel:last-child:nth-child(odd){grid-column:1/-1}
+    }
   </style>
 </head>
 
@@ -2228,7 +2245,7 @@
 
     list.innerHTML = "";
 
-    const months = [...new Set(records.map(r => String(r.date || "").slice(0,7)).filter(m => /^\\d{4}-\\d{2}$/.test(m)))].sort().reverse();
+    const months = [...new Set(records.map(r => String(r.date || "").slice(0,7)).filter(m => /^\d{4}-\d{2}$/.test(m)))].sort().reverse();
     if (!months.includes(selectedRecordMonth)) selectedRecordMonth = months[0] || "";
     const monthSelect = document.getElementById("recordMonth");
     monthSelect.replaceChildren();
