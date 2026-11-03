@@ -1698,6 +1698,30 @@
     body.dark-mode #page-records .backup-btn,
     body.dark-mode #page-records .restore-btn{background:#293346!important;color:#f1edf1!important;border:1px solid #485064!important;box-shadow:none!important}
     body.dark-mode #page-records .hours-picker button.active{background:#bf1e36!important;color:#fff!important;border-color:#bf1e36!important}
+
+    /* Refined editorial wordmark: compact dm. monogram, no pictogram or arrow */
+    .header-brand .brand-mark-premium{
+      width:46px!important;height:46px!important;border-radius:14px!important;
+      display:inline-flex!important;align-items:center!important;justify-content:center!important;
+      background:#b91d35!important;color:#fff!important;
+      box-shadow:0 5px 14px rgba(185,29,53,.16)!important;
+      transform:none!important;overflow:hidden!important
+    }
+    .brand-monogram-premium{
+      display:block!important;font-family:Inter,"Arial",sans-serif!important;
+      font-size:22px!important;font-weight:850!important;line-height:1!important;
+      letter-spacing:-2.1px!important;color:#fff!important;white-space:nowrap!important;
+      transform:translateX(-1px)!important
+    }
+    .brand-mark-dot{color:#ffb7c2!important;letter-spacing:-2px!important}
+    .header-brand>span:last-child{
+      font-size:20px!important;font-weight:850!important;letter-spacing:-.35px!important;
+    }
+    @media(max-width:480px){
+      .header-brand .brand-mark-premium{width:40px!important;height:40px!important;border-radius:12px!important}
+      .brand-monogram-premium{font-size:20px!important}
+      .header-brand>span:last-child{font-size:17px!important}
+    }
   </style>
 </head>
 
@@ -1705,7 +1729,7 @@
 
 <div class="container app-shell"><aside class="app-sidebar" aria-label="주 메뉴"><div class="app-brand"><div class="brand-words"><span>DELIVERY MONEY</span><strong>배달머니</strong></div></div><nav class="app-nav" aria-label="화면 이동"><button type="button" class="app-nav-btn active" data-page="home" onclick="switchAppPage('home')"><span class="nav-icon">⌂</span>홈</button><button type="button" class="app-nav-btn" data-page="records" onclick="switchAppPage('records')"><span class="nav-icon">✎</span>기록</button><button type="button" class="app-nav-btn" data-page="analytics" onclick="switchAppPage('analytics-day')"><span class="nav-icon">▥</span>분석</button><button type="button" class="app-nav-btn" data-page="expenses" onclick="switchAppPage('expenses')"><span class="nav-icon">▤</span>지출</button></nav><div class="app-sidebar-foot">수입부터 지출까지<br>한곳에서 간편하게 관리하세요.</div></aside><div class="app-main">  <header>
     <div>
-      <div class="logo header-brand"><span class="brand-mark" aria-hidden="true"><span class="brand-monogram">D<span class="brand-arrow">➜</span></span></span><span>DELIVERY MONEY</span></div>
+      <div class="logo header-brand"><span class="brand-mark brand-mark-premium" aria-hidden="true"><span class="brand-monogram-premium">dm<span class="brand-mark-dot">.</span></span></span><span>DELIVERY MONEY</span></div>
       <div class="subtitle">나의 배달 수익 관리 대시보드</div>
     </div>
     <div class="header-actions"><div class="date" id="today"></div><button type="button" class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="화면 테마 변경">☀️ 라이트 모드</button></div>
