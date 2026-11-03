@@ -935,6 +935,10 @@
       .monthly-overview-main{grid-template-columns:1fr;gap:17px}
       .monthly-overview-stats{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:14px}
     }
+    /* Align monthly net figure with the overview heading on both axes */
+    .monthly-overview-main{max-width:none;margin-left:0;margin-right:0;align-items:center}
+    .monthly-net-block{width:100%;min-width:0;align-items:flex-start;justify-content:center;text-align:left}
+    .monthly-net-block span,.monthly-net-block strong,.monthly-net-block small{text-align:left}
     /* 넓은 기록 입력 영역과 큰 날짜 선택 달력 */
     .entry-panel{margin:18px 0 24px;padding:24px;max-width:none}
     .entry-panel .section-title{margin-top:0}
