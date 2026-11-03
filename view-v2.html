@@ -1763,6 +1763,10 @@
     body:not(.dark-mode) .monthly-overview .overview-progress-track>div,
     body:not(.dark-mode) .weekday-fill{background:#bf1e36!important;background-image:none!important}
     body:not(.dark-mode) .record-month-summary{color:#725760!important}
+
+    /* Text-only controls: remove decorative emoji styling while keeping actions */
+    .theme-toggle{display:inline-flex;align-items:center;justify-content:center;gap:0!important}
+    #page-records .history .tools button{font-family:inherit!important;letter-spacing:0!important}
   </style>
 </head>
 
@@ -1773,7 +1777,7 @@
       <div class="logo header-brand"><span class="brand-mark brand-mark-premium" aria-hidden="true"><span class="brand-monogram-premium">dm<span class="brand-mark-dot">.</span></span></span><span>DELIVERY MONEY</span></div>
       <div class="subtitle">나의 배달 수익 관리 대시보드</div>
     </div>
-    <div class="header-actions"><div class="date" id="today"></div><button type="button" class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="화면 테마 변경">☀️ 라이트 모드</button></div>
+    <div class="header-actions"><div class="date" id="today"></div><button type="button" class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="화면 테마 변경">라이트 모드</button></div>
   </header><section class="app-page active" id="page-home" aria-label="한눈에 보는 수익"><div class="page-intro"><div class="eyebrow">OVERVIEW</div><h1>한눈에 보는 수익</h1><p>오늘과 이번 달의 핵심 실적을 확인하세요.</p></div>  <!-- 이번 달 핵심 요약 -->
   <section class="monthly-overview" aria-label="이번 달 핵심 실적">
     <div class="monthly-overview-head">
@@ -1890,21 +1894,21 @@
   <!-- 기록 내역 -->
   <div class="history">
 
-    <h2 class="section-title">📊 배달 기록 내역</h2>
+    <h2 class="section-title">배달 기록 내역</h2>
 
     <div class="tools">
 
       <button class="csv-btn" onclick="downloadCSV()">
-        📊 엑셀 다운로드
+        엑셀 다운로드
       </button>
 
       <button class="backup-btn" onclick="backupData()">
-        💾 전체 백업
+        전체 백업
       </button>
 
       <button class="restore-btn"
         onclick="document.getElementById('restoreFile').click()">
-        📂 백업 복구
+        백업 복구
       </button>
 
       <input
@@ -1947,7 +1951,7 @@
   </div>
 
 </section><section class="app-page" id="page-analytics" aria-label="수익 분석"><div class="page-intro"><div class="eyebrow">INSIGHTS</div><h1 id="analysisPeriodTitle">일별 수익 분석</h1><p id="analysisPeriodDescription">선택한 날짜의 플랫폼별 수입과 순수익을 확인하세요.</p></div><div class="analytics-period-tabs" aria-label="분석 기간"><button type="button" data-period="day" onclick="switchAppPage('analytics-day')">일별</button><button type="button" data-period="week" onclick="switchAppPage('analytics-week')">주별</button><button type="button" data-period="month" onclick="switchAppPage('analytics-month')">월별</button></div><div class="analytics-period-view" id="analysis-day"></div><div class="analytics-period-view" id="analysis-week"></div><div class="analytics-period-view" id="analysis-month"></div>  <section class="analytics-section" id="analyticsLegacySection">
-    <h2 class="section-title">📈 기간별 수익 분석</h2>
+    <h2 class="section-title">기간별 수익 분석</h2>
     <div class="analytics-grid">
       <div class="analytics-card"><div class="label">이번 주 순수익</div><div class="value green" id="weekNet">0원</div></div>
       <div class="analytics-card"><div class="label">이번 주 배달 건수</div><div class="value" id="weekOrders">0건</div></div>
@@ -2042,7 +2046,7 @@
   </div>
 
 </section><section class="app-page" id="page-expenses" aria-label="지출 관리"><div class="page-intro"><div class="eyebrow">EXPENSES</div><h1>지출 관리</h1><p>유류비부터 정비비까지 지출을 체계적으로 기록하세요.</p></div>  <section class="expense-panel">
-    <h2 class="section-title">💳 지출 상세 관리</h2>
+    <h2 class="section-title">지출 상세 관리</h2>
     <p style="color:#777;font-size:13px;margin-top:-5px;">선택한 날짜의 지출을 항목별로 기록합니다. 등록한 지출은 총지출과 순수익에 자동 반영됩니다.</p>
     <div class="expense-form">
       <div><label for="expenseCategory">지출 항목</label><select id="expenseCategory" style="width:100%;padding:13px;border:1px solid #ddd;border-radius:9px;font-size:15px;"><option>유류비</option><option>식비</option><option>오토바이 정비비</option><option>보험료</option><option>통신비</option><option>주차·통행료</option><option>장비·용품</option><option>기타</option></select></div>
@@ -2171,7 +2175,7 @@
   function applyTheme(mode) {
     const dark = mode !== "light";
     document.body.classList.toggle("dark-mode", dark);
-    document.getElementById("themeToggle").textContent = dark ? "☀️ 라이트 모드" : "🌙 다크 모드";
+    document.getElementById("themeToggle").textContent = dark ? "라이트 모드" : "다크 모드";
     document.querySelector('meta[name="theme-color"]').setAttribute("content", dark ? "#0b111b" : "#f5f7fb");
   }
   function toggleTheme() {
