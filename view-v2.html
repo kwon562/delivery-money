@@ -1787,6 +1787,33 @@
       #page-analytics{padding:0 4px 16px!important}
       #page-analytics .analytics-period-view .panel{padding:20px 18px!important}
     }
+
+    /* Align account card edges with analytics content and add breathing room */
+    .app-main>.auth-panel{
+      box-sizing:border-box!important;
+      width:calc(100% - 44px)!important;
+      margin:36px 22px 26px!important;
+      padding:28px 32px!important;
+      border-radius:16px!important;
+      column-gap:24px!important;
+      row-gap:12px!important;
+    }
+    .app-main>.auth-panel>.section-title{margin:0!important}
+    .app-main>.auth-panel #userArea{min-width:0!important}
+    @media(max-width:850px){
+      .app-main>.auth-panel{
+        width:calc(100% - 28px)!important;
+        margin:28px 14px 22px!important;
+        padding:24px!important
+      }
+    }
+    @media(max-width:480px){
+      .app-main>.auth-panel{
+        width:calc(100% - 16px)!important;
+        margin:24px 8px 18px!important;
+        padding:20px!important
+      }
+    }
   </style>
 </head>
 
