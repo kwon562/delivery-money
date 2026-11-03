@@ -1121,54 +1121,97 @@
     body.dark-mode .theme-toggle{background:#22364b;border-color:#426077;color:#e8f4ff}
     .header-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}
     @media(max-width:600px){.header-actions{gap:7px}.theme-toggle{padding:9px 10px;font-size:12px}}
+
+    /* Refined app shell and four focused workspaces */
+    body{font-family:Inter,"Pretendard","Malgun Gothic",Arial,sans-serif}
+    .container{max-width:1360px}
+    .app-shell{display:grid;grid-template-columns:224px minmax(0,1fr);gap:26px;align-items:start}
+    .app-sidebar{position:sticky;top:20px;padding:23px 15px;min-height:calc(100vh - 40px);border:1px solid #303d51;border-radius:20px;background:#131e2c}
+    .app-brand{padding:7px 12px 24px;color:#f4faf8;font-size:19px;font-weight:850;letter-spacing:-.6px}
+    .app-brand span{display:block;color:#59dfb6;font-size:10px;letter-spacing:2px;margin-bottom:8px}
+    .app-nav{display:grid;gap:7px}
+    .app-nav-btn{display:flex;align-items:center;gap:12px;width:100%;min-height:49px;padding:12px 15px;border:1px solid transparent;border-radius:12px;background:transparent;color:#a9bacd;font-weight:750;font-size:14px;text-align:left;cursor:pointer;transition:background .18s,color .18s}
+    .app-nav-btn .nav-icon{font-size:19px;width:23px;text-align:center}
+    .app-nav-btn.active{background:#173e36;color:#79f1c9;border-color:#2c6657}
+    .app-nav-btn:hover:not(.active){background:#223249;color:#eef6ff}
+    .app-sidebar-foot{margin-top:32px;padding:14px 12px;border-top:1px solid #314052;color:#8fa6b9;font-size:12px;line-height:1.7}
+    .app-main{min-width:0}
+    .app-main>header{margin-bottom:20px;padding:5px 2px 10px}
+    .app-main .logo{font-size:21px;letter-spacing:.2px}
+    .app-page{display:none;min-width:0}
+    .app-page.active{display:block;animation:page-enter .22s ease-out}
+    @keyframes page-enter{from{opacity:.6;transform:translateY(5px)}to{opacity:1;transform:none}}
+    .page-intro{margin:2px 0 22px}
+    .page-intro .eyebrow{color:#5cdbb3;font-size:11px;font-weight:800;letter-spacing:2px}
+    .page-intro h1{font-size:clamp(25px,3vw,34px);letter-spacing:-1.1px;margin:7px 0 6px}
+    .page-intro p{font-size:13px;color:#9dafc3;margin:0;line-height:1.65}
+    .app-page .monthly-overview{margin-top:0}
+    .app-page .entry-panel{margin:0 0 22px}
+    .app-page .analytics-section{margin-top:0}
+    .app-page .history,.app-page .expense-panel{margin-top:0}
+    .app-page .section-title{margin-top:0}
+    .app-page .content-grid{margin-top:15px}
+    body:not(.dark-mode) .app-sidebar{background:#fff;border-color:#e0e8ee}
+    body:not(.dark-mode) .app-brand{color:#163a31}
+    body:not(.dark-mode) .app-nav-btn{color:#536779}
+    body:not(.dark-mode) .app-nav-btn.active{background:#e5f8f0;color:#067956;border-color:#c2e7d7}
+    body:not(.dark-mode) .app-nav-btn:hover:not(.active){background:#f1f6f9;color:#243749}
+    body:not(.dark-mode) .app-sidebar-foot{color:#728497;border-color:#e5edf1}
+    body:not(.dark-mode) .page-intro h1{color:#182c39}
+    body:not(.dark-mode) .page-intro p{color:#6c7e8c}
+    @media(max-width:850px){
+      body{padding:12px 12px 90px}
+      .app-shell{display:block}
+      .app-sidebar{position:fixed;z-index:100;top:auto;left:0;right:0;bottom:0;min-height:0;padding:8px 10px max(8px,env(safe-area-inset-bottom));border-radius:18px 18px 0 0;border-bottom:0;box-shadow:0 -8px 35px #0004}
+      .app-brand,.app-sidebar-foot{display:none}
+      .app-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+      .app-nav-btn{display:flex;flex-direction:column;justify-content:center;gap:2px;min-height:54px;padding:5px 2px;font-size:11px;text-align:center}
+      .app-nav-btn .nav-icon{font-size:21px;width:auto}
+      .app-main>header{margin:0 0 18px}
+      .page-intro{margin-bottom:17px}
+      .page-intro h1{font-size:26px}
+    }
   </style>
 </head>
 
 <body class="dark-mode">
 
-<div class="container">
-
-  <header>
+<div class="container app-shell"><aside class="app-sidebar" aria-label="주 메뉴"><div class="app-brand"><span>DELIVERY MONEY</span>배달머니</div><nav class="app-nav" aria-label="화면 이동"><button type="button" class="app-nav-btn active" data-page="home" onclick="switchAppPage('home')"><span class="nav-icon">⌂</span>홈</button><button type="button" class="app-nav-btn" data-page="records" onclick="switchAppPage('records')"><span class="nav-icon">✎</span>기록</button><button type="button" class="app-nav-btn" data-page="analytics" onclick="switchAppPage('analytics')"><span class="nav-icon">▥</span>분석</button><button type="button" class="app-nav-btn" data-page="expenses" onclick="switchAppPage('expenses')"><span class="nav-icon">▤</span>지출</button></nav><div class="app-sidebar-foot">수입부터 지출까지<br>한곳에서 간편하게 관리하세요.</div></aside><div class="app-main">  <header>
     <div>
       <div class="logo">DELIVERY MONEY</div>
       <div class="subtitle">나의 배달 수익 관리 대시보드</div>
     </div>
     <div class="header-actions"><div class="date" id="today"></div><button type="button" class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="화면 테마 변경">☀️ 라이트 모드</button></div>
-  </header>
-
-  <!-- 로그인 영역 -->
-  <div class="auth-panel">
-
-    <h2 class="section-title">계정</h2>
-
-    <div id="authForm">
-      <div class="auth-fields">
-        <div><label for="email">이메일</label><input type="email" id="email" placeholder="이메일 주소" autocomplete="username"></div>
-        <div><label for="password">비밀번호</label><input type="password" id="password" placeholder="비밀번호" autocomplete="current-password"></div>
+  </header><section class="app-page active" id="page-home" aria-label="한눈에 보는 수익"><div class="page-intro"><div class="eyebrow">OVERVIEW</div><h1>한눈에 보는 수익</h1><p>오늘과 이번 달의 핵심 실적을 확인하세요.</p></div>  <!-- 이번 달 핵심 요약 -->
+  <section class="monthly-overview" aria-label="이번 달 핵심 실적">
+    <div class="monthly-overview-head">
+      <div>
+        <div class="eyebrow">MONTHLY OVERVIEW</div>
+        <h2>이번 달 수익 현황</h2>
+        <p id="monthlyOverviewCaption">선택한 날짜가 속한 달의 누적 실적입니다.</p>
       </div>
-
-      <div class="auth-buttons">
-        <button class="login-btn" onclick="login()">로그인</button>
-        <button class="signup-btn" onclick="signup()">회원가입</button>
+      <div class="monthly-overview-chip"><span class="live-dot"></span> MONTH TO DATE</div>
+    </div>
+    <div class="monthly-overview-main">
+      <div class="monthly-net-block">
+        <span>이번 달 순수익</span>
+        <strong id="overviewMonthNet">0원</strong>
+        <small id="overviewMonthCompare">기록을 입력하면 월간 실적이 표시됩니다.</small>
+      </div>
+      <div class="monthly-progress-block">
+        <div class="progress-heading"><span>월간 목표 달성률</span><strong id="overviewGoalRate">0%</strong></div>
+        <div class="overview-progress-track"><div id="overviewGoalBar"></div></div>
+        <div class="progress-foot"><span id="overviewGoalCurrent">현재 0원</span><span id="overviewGoalTarget">목표 1,000,000원</span></div>
       </div>
     </div>
-
-    <div id="userArea" style="display:none;">
-      <div id="userEmail"></div>
-      <button class="logout-btn" onclick="logout()" style="margin-top:12px;">
-        로그아웃
-      </button>
+    <div class="monthly-overview-stats">
+      <div><span>총수입</span><strong id="overviewGross">0원</strong></div>
+      <div><span>총지출</span><strong id="overviewExpenses">0원</strong></div>
+      <div><span>배달 건수</span><strong id="overviewOrders">0건</strong></div>
+      <div><span>운행 시간</span><strong id="overviewHours">0시간</strong></div>
     </div>
+  </section>
 
-    <div class="auth-status" id="authStatus">
-      로그인하면 배달 기록을 클라우드에 저장할 수 있습니다.
-    </div>
-
-    <div class="sync-status" id="syncStatus">
-      현재 브라우저 저장소 사용 중
-    </div>
-
-  </div>
 
   <!-- 대시보드 -->
   <h2 class="section-title">오늘의 실적</h2>
@@ -1197,7 +1240,7 @@
 
   </div>
 
-  <!-- 실적 바로 아래에서 배달 수입을 입력합니다. -->
+</section><section class="app-page" id="page-records" aria-label="배달 기록"><div class="page-intro"><div class="eyebrow">RECORDS</div><h1>배달 기록</h1><p>배민커넥트와 쿠팡이츠 수입을 기록하고 관리하세요.</p></div>  <!-- 실적 바로 아래에서 배달 수입을 입력합니다. -->
     <!-- 기록 입력 -->
     <div class="panel entry-panel" id="recordEntryPanel">
 
@@ -1252,38 +1295,66 @@
     </div>
 
 
-  <!-- 이번 달 핵심 요약 -->
-  <section class="monthly-overview" aria-label="이번 달 핵심 실적">
-    <div class="monthly-overview-head">
-      <div>
-        <div class="eyebrow">MONTHLY OVERVIEW</div>
-        <h2>이번 달 수익 현황</h2>
-        <p id="monthlyOverviewCaption">선택한 날짜가 속한 달의 누적 실적입니다.</p>
-      </div>
-      <div class="monthly-overview-chip"><span class="live-dot"></span> MONTH TO DATE</div>
-    </div>
-    <div class="monthly-overview-main">
-      <div class="monthly-net-block">
-        <span>이번 달 순수익</span>
-        <strong id="overviewMonthNet">0원</strong>
-        <small id="overviewMonthCompare">기록을 입력하면 월간 실적이 표시됩니다.</small>
-      </div>
-      <div class="monthly-progress-block">
-        <div class="progress-heading"><span>월간 목표 달성률</span><strong id="overviewGoalRate">0%</strong></div>
-        <div class="overview-progress-track"><div id="overviewGoalBar"></div></div>
-        <div class="progress-foot"><span id="overviewGoalCurrent">현재 0원</span><span id="overviewGoalTarget">목표 1,000,000원</span></div>
-      </div>
-    </div>
-    <div class="monthly-overview-stats">
-      <div><span>총수입</span><strong id="overviewGross">0원</strong></div>
-      <div><span>총지출</span><strong id="overviewExpenses">0원</strong></div>
-      <div><span>배달 건수</span><strong id="overviewOrders">0건</strong></div>
-      <div><span>운행 시간</span><strong id="overviewHours">0시간</strong></div>
-    </div>
-  </section>
+  <!-- 기록 내역 -->
+  <div class="history">
 
+    <h2 class="section-title">📊 배달 기록 내역</h2>
 
-  <section class="analytics-section">
+    <div class="tools">
+
+      <button class="csv-btn" onclick="downloadCSV()">
+        📊 엑셀 다운로드
+      </button>
+
+      <button class="backup-btn" onclick="backupData()">
+        💾 전체 백업
+      </button>
+
+      <button class="restore-btn"
+        onclick="document.getElementById('restoreFile').click()">
+        📂 백업 복구
+      </button>
+
+      <input
+        type="file"
+        id="restoreFile"
+        accept=".json"
+        style="display:none"
+        onchange="restoreData(event)"
+      >
+
+    </div>
+
+    <div class="record-month-controls">
+      <label for="recordMonth">조회할 월</label>
+      <select id="recordMonth" onchange="changeRecordMonth(this.value)" aria-label="배달 기록 조회 월"></select>
+      <button type="button" id="recordMonthToggle" onclick="toggleRecordMonth()" aria-expanded="false">날짜별 기록 펼치기 ▾</button>
+      <span id="recordMonthSummary" class="record-month-summary"></span>
+    </div>
+    <div id="recordMonthDetails" hidden>
+    <table>
+
+      <thead>
+        <tr>
+          <th>날짜</th>
+          <th>배민 수입</th>
+          <th>쿠팡 수입</th>
+          <th>총수입</th>
+          <th>지출</th>
+          <th>순수익</th>
+          <th>배달 건수</th>
+          <th>관리</th>
+        </tr>
+      </thead>
+
+      <tbody id="recordList"></tbody>
+
+    </table>
+    </div>
+
+  </div>
+
+</section><section class="app-page" id="page-analytics" aria-label="수익 분석"><div class="page-intro"><div class="eyebrow">INSIGHTS</div><h1>수익 분석</h1><p>플랫폼과 기간별 수익 흐름을 살펴보세요.</p></div>  <section class="analytics-section">
     <h2 class="section-title">📈 기간별 수익 분석</h2>
     <div class="analytics-grid">
       <div class="analytics-card"><div class="label">이번 주 순수익</div><div class="value green" id="weekNet">0원</div></div>
@@ -1378,66 +1449,7 @@
 
   </div>
 
-  <!-- 기록 내역 -->
-  <div class="history">
-
-    <h2 class="section-title">📊 배달 기록 내역</h2>
-
-    <div class="tools">
-
-      <button class="csv-btn" onclick="downloadCSV()">
-        📊 엑셀 다운로드
-      </button>
-
-      <button class="backup-btn" onclick="backupData()">
-        💾 전체 백업
-      </button>
-
-      <button class="restore-btn"
-        onclick="document.getElementById('restoreFile').click()">
-        📂 백업 복구
-      </button>
-
-      <input
-        type="file"
-        id="restoreFile"
-        accept=".json"
-        style="display:none"
-        onchange="restoreData(event)"
-      >
-
-    </div>
-
-    <div class="record-month-controls">
-      <label for="recordMonth">조회할 월</label>
-      <select id="recordMonth" onchange="changeRecordMonth(this.value)" aria-label="배달 기록 조회 월"></select>
-      <button type="button" id="recordMonthToggle" onclick="toggleRecordMonth()" aria-expanded="false">날짜별 기록 펼치기 ▾</button>
-      <span id="recordMonthSummary" class="record-month-summary"></span>
-    </div>
-    <div id="recordMonthDetails" hidden>
-    <table>
-
-      <thead>
-        <tr>
-          <th>날짜</th>
-          <th>배민 수입</th>
-          <th>쿠팡 수입</th>
-          <th>총수입</th>
-          <th>지출</th>
-          <th>순수익</th>
-          <th>배달 건수</th>
-          <th>관리</th>
-        </tr>
-      </thead>
-
-      <tbody id="recordList"></tbody>
-
-    </table>
-    </div>
-
-  </div>
-
-  <section class="expense-panel">
+</section><section class="app-page" id="page-expenses" aria-label="지출 관리"><div class="page-intro"><div class="eyebrow">EXPENSES</div><h1>지출 관리</h1><p>유류비부터 정비비까지 지출을 체계적으로 기록하세요.</p></div>  <section class="expense-panel">
     <h2 class="section-title">💳 지출 상세 관리</h2>
     <p style="color:#777;font-size:13px;margin-top:-5px;">선택한 날짜의 지출을 항목별로 기록합니다. 등록한 지출은 총지출과 순수익에 자동 반영됩니다.</p>
     <div class="expense-form">
@@ -1451,9 +1463,58 @@
     <div class="expense-list-wrap"><table class="expense-list"><thead><tr><th>항목</th><th>금액</th><th>메모</th><th>관리</th></tr></thead><tbody id="expenseList"><tr><td colspan="4" class="expense-empty">아직 등록된 지출이 없습니다.</td></tr></tbody></table></div>
   </section>
 
+</section>  <!-- 로그인 영역 -->
+  <div class="auth-panel">
 
-</div>
+    <h2 class="section-title">계정</h2>
 
+    <div id="authForm">
+      <div class="auth-fields">
+        <div><label for="email">이메일</label><input type="email" id="email" placeholder="이메일 주소" autocomplete="username"></div>
+        <div><label for="password">비밀번호</label><input type="password" id="password" placeholder="비밀번호" autocomplete="current-password"></div>
+      </div>
+
+      <div class="auth-buttons">
+        <button class="login-btn" onclick="login()">로그인</button>
+        <button class="signup-btn" onclick="signup()">회원가입</button>
+      </div>
+    </div>
+
+    <div id="userArea" style="display:none;">
+      <div id="userEmail"></div>
+      <button class="logout-btn" onclick="logout()" style="margin-top:12px;">
+        로그아웃
+      </button>
+    </div>
+
+    <div class="auth-status" id="authStatus">
+      로그인하면 배달 기록을 클라우드에 저장할 수 있습니다.
+    </div>
+
+    <div class="sync-status" id="syncStatus">
+      현재 브라우저 저장소 사용 중
+    </div>
+
+  </div>
+
+</div></div>
+
+<script>
+  function switchAppPage(page){
+    if(!['home','records','analytics','expenses'].includes(page)) page='home';
+    document.querySelectorAll('.app-page').forEach(el=>el.classList.toggle('active',el.id==='page-'+page));
+    document.querySelectorAll('.app-nav-btn').forEach(el=>{
+      const selected=el.dataset.page===page;
+      el.classList.toggle('active',selected);
+      if(selected)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');
+    });
+    if(location.hash!=='#'+page)history.replaceState(null,'','#'+page);
+    window.scrollTo({top:0,behavior:'instant'});
+    if(page==='analytics'&&typeof updateAnalytics==='function')updateAnalytics();
+  }
+  window.addEventListener('hashchange',()=>switchAppPage(location.hash.slice(1)||'home'));
+  switchAppPage(location.hash.slice(1)||'home');
+</script>
 <!-- Supabase 라이브러리 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
