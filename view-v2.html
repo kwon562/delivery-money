@@ -961,6 +961,15 @@
     .hours-selected{flex:1.3;text-align:center;font-size:12px;color:#52645c}
     .hours-selected strong{display:block;font-size:19px;color:#137b5e;margin-top:3px}
     @media(max-width:420px){.hours-picker{gap:5px}.hours-picker button{font-size:13px;padding:11px 3px}.hours-adjust{gap:5px}.hours-adjust>button{padding:10px 5px;font-size:12px}.hours-selected strong{font-size:17px}}
+
+    .record-month-controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:10px 0 12px}
+    .record-month-controls label{margin:0;font-size:14px}
+    .record-month-controls select{min-width:145px;min-height:44px;padding:9px 12px;border:1px solid #d9e4de;border-radius:10px;background:white;font-size:15px}
+    .record-month-controls button{min-height:44px;background:#eaf6f0;color:#12694e;border:1px solid #bde3d1}
+    .record-month-summary{color:#607268;font-size:13px;flex-basis:100%}
+    #recordMonthDetails[hidden]{display:none}
+    #recordMonthDetails{overflow-x:auto}
+    @media(max-width:500px){.record-month-controls select{flex:1;min-width:0}.record-month-controls button{flex:1}.record-month-controls{gap:7px}}
   </style>
 </head>
 
@@ -1251,6 +1260,13 @@
 
     </div>
 
+    <div class="record-month-controls">
+      <label for="recordMonth">조회할 월</label>
+      <select id="recordMonth" onchange="changeRecordMonth(this.value)" aria-label="배달 기록 조회 월"></select>
+      <button type="button" id="recordMonthToggle" onclick="toggleRecordMonth()" aria-expanded="false">날짜별 기록 펼치기 ▾</button>
+      <span id="recordMonthSummary" class="record-month-summary"></span>
+    </div>
+    <div id="recordMonthDetails" hidden>
     <table>
 
       <thead>
@@ -1269,6 +1285,7 @@
       <tbody id="recordList"></tbody>
 
     </table>
+    </div>
 
   </div>
 
@@ -2193,16 +2210,54 @@
       const td=document.createElement("td"),btn=document.createElement("button");btn.className="delete-btn";btn.textContent="삭제";btn.onclick=()=>deleteExpense(item.id);td.appendChild(btn);row.appendChild(td);list.appendChild(row);});
   }
 
+  let selectedRecordMonth = "";
+  let recordMonthExpanded = false;
+  function changeRecordMonth(month) {
+    selectedRecordMonth = month;
+    recordMonthExpanded = false;
+    renderRecords();
+  }
+  function toggleRecordMonth() {
+    if (!selectedRecordMonth) return;
+    recordMonthExpanded = !recordMonthExpanded;
+    renderRecords();
+  }
   function renderRecords() {
 
     const list = document.getElementById("recordList");
 
     list.innerHTML = "";
 
-    const sorted = [...records].sort(
-      (a, b) => b.date.localeCompare(a.date)
-    );
-
+    const months = [...new Set(records.map(r => String(r.date || "").slice(0,7)).filter(m => /^\\d{4}-\\d{2}$/.test(m)))].sort().reverse();
+    if (!months.includes(selectedRecordMonth)) selectedRecordMonth = months[0] || "";
+    const monthSelect = document.getElementById("recordMonth");
+    monthSelect.replaceChildren();
+    if (!months.length) {
+      const option = document.createElement("option");
+      option.textContent = "저장된 기록 없음";
+      option.value = "";
+      monthSelect.appendChild(option);
+    } else {
+      months.forEach(month => {
+        const option = document.createElement("option");
+        option.value = month;
+        option.textContent = month.slice(0,4) + "년 " + Number(month.slice(5)) + "월";
+        monthSelect.appendChild(option);
+      });
+    }
+    monthSelect.value = selectedRecordMonth;
+    const sorted = records.filter(r => String(r.date).startsWith(selectedRecordMonth))
+      .sort((a, b) => b.date.localeCompare(a.date));
+    const monthNet = sorted.reduce((sum,r) => sum + Number(r.net || 0),0);
+    document.getElementById("recordMonthSummary").textContent = sorted.length
+      ? sorted.length + "일 기록 · 순수익 " + won(monthNet)
+      : "선택한 월에 기록이 없습니다.";
+    document.getElementById("recordMonthDetails").hidden = !recordMonthExpanded;
+    const toggle = document.getElementById("recordMonthToggle");
+    toggle.disabled = !sorted.length;
+    toggle.setAttribute("aria-expanded", String(recordMonthExpanded));
+    toggle.textContent = recordMonthExpanded ? "날짜별 기록 접기 ▴" : "날짜별 기록 펼치기 ▾";
+    if (!recordMonthExpanded) return;
     sorted.forEach(r => {
 
       const row = document.createElement("tr");
