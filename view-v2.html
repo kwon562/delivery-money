@@ -1472,6 +1472,31 @@
     body.dark-mode .app-page .bar-fill.coupang{background:#ac728a!important}
     body.dark-mode .app-page .section-title::before{background:#e04762!important}
     body.dark-mode .monthly-overview-chip{background:#49232f!important;color:#ffb4c3!important;border-color:#783b4d!important}
+
+    /* Reference-style pill navigation: red active, red outlined hover */
+    .app-nav{gap:10px}
+    .app-nav-btn,body.dark-mode .app-nav-btn,body:not(.dark-mode) .app-nav-btn{
+      justify-content:center;border:1.5px solid #d8d6d8!important;
+      border-radius:999px!important;background:#fff!important;color:#28252a!important;
+      font-weight:750;box-shadow:none!important;transition:background .18s,color .18s,border-color .18s!important
+    }
+    .app-nav-btn.active,body.dark-mode .app-nav-btn.active,body:not(.dark-mode) .app-nav-btn.active{
+      background:#bf1e36!important;border-color:#bf1e36!important;color:#fff!important;
+      box-shadow:none!important
+    }
+    .app-nav-btn:hover:not(.active),body.dark-mode .app-nav-btn:hover:not(.active),body:not(.dark-mode) .app-nav-btn:hover:not(.active){
+      background:#fff!important;border-color:#bf1e36!important;color:#bf1e36!important
+    }
+    .app-nav-btn:focus-visible{outline:2px solid #bf1e36;outline-offset:3px}
+    .app-sidebar,body:not(.dark-mode) .app-sidebar{background:#f7f5f6!important;border-color:#e3dfe2!important}
+    .app-brand,body:not(.dark-mode) .app-brand{color:#28242a!important}
+    .app-brand span,body:not(.dark-mode) .app-brand span{color:#bf1e36!important}
+    .app-sidebar-foot,body:not(.dark-mode) .app-sidebar-foot{color:#6d666d!important;border-color:#e3dfe2!important}
+    @media(max-width:850px){
+      .app-nav{gap:5px}
+      .app-nav-btn{min-height:49px;padding:6px 2px!important;font-size:11px}
+      .app-sidebar,body:not(.dark-mode) .app-sidebar{background:#f7f5f6!important}
+    }
   </style>
 </head>
 
