@@ -1020,6 +1020,15 @@
       .analytics-section > .chart-panel:nth-of-type(2){grid-column:1 / -1}
       .analytics-section > .chart-panel:last-child{grid-column:1 / -1}
     }
+
+    /* 서로 다른 높이의 분석 카드를 독립 열에 쌓아 세로 빈 공간 제거 */
+    .analytics-section{display:block}
+    .analytics-section>.section-title{margin-bottom:14px}
+    .analytics-section>.analytics-grid{margin-bottom:14px}
+    .analytics-masonry{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}
+    .analytics-masonry-column{display:flex;flex-direction:column;gap:14px;min-width:0}
+    .analytics-masonry-column>.chart-panel{margin:0;min-width:0;width:100%}
+    @media(max-width:800px){.analytics-masonry{grid-template-columns:minmax(0,1fr)}}
   </style>
 </head>
 
@@ -1190,6 +1199,8 @@
       <div class="analytics-card"><div class="label">이번 달 순수익</div><div class="value green" id="monthNet">0원</div></div>
       <div class="analytics-card"><div class="label">이번 달 시간당 순수익</div><div class="value" id="monthHourly">0원</div></div>
     </div>
+    <div class="analytics-masonry">
+      <div class="analytics-masonry-column">
     <div class="chart-panel">
       <h3 style="margin:0 0 12px;font-size:16px;">최근 7일 수입 추이</h3>
       <div class="chart-wrap"><canvas id="incomeChart" aria-label="최근 7일 총수입 그래프"></canvas></div>
@@ -1204,6 +1215,14 @@
       <div class="analytics-note">현재 저장된 기록의 월간 합계를 기준으로 계산합니다.</div>
     </div>
     <div class="chart-panel">
+      <h3 style="margin:0 0 12px;font-size:16px;">요일별 수익 분석</h3>
+      <div class="analytics-note">저장된 모든 배달 기록을 요일별로 합산합니다. 막대는 순수익 기준입니다.</div>
+      <div class="weekday-list" id="weekdayList"></div>
+      <div class="weekday-best" id="weekdayBest">기록이 쌓이면 가장 효율적인 요일을 분석해 드립니다.</div>
+    </div>
+      </div>
+      <div class="analytics-masonry-column">
+    <div class="chart-panel">
       <h3 style="margin:0 0 12px;font-size:16px;">월별 수익 변화</h3>
       <div class="analytics-grid" style="margin-bottom:14px;">
         <div class="analytics-card"><div class="label">지난달 순수익</div><div class="value" id="previousMonthNet">0원</div></div>
@@ -1211,12 +1230,6 @@
       </div>
       <div id="monthlyTrend" class="monthly-trend" aria-label="최근 6개월 순수익 비교"></div>
       <div class="analytics-note">선택한 날짜가 속한 달과 이전 5개월의 순수익 합계입니다.</div>
-    </div>
-    <div class="chart-panel">
-      <h3 style="margin:0 0 12px;font-size:16px;">요일별 수익 분석</h3>
-      <div class="analytics-note">저장된 모든 배달 기록을 요일별로 합산합니다. 막대는 순수익 기준입니다.</div>
-      <div class="weekday-list" id="weekdayList"></div>
-      <div class="weekday-best" id="weekdayBest">기록이 쌓이면 가장 효율적인 요일을 분석해 드립니다.</div>
     </div>
     <div class="chart-panel">
       <h3 style="margin:0 0 12px;font-size:16px;">이번 달 예상 수익과 목표</h3>
@@ -1234,6 +1247,8 @@
       </div>
       <div class="weekday-track" style="height:16px;margin-top:14px;"><div class="weekday-fill" id="monthlyGoalBar" style="width:0%"></div></div>
       <div class="analytics-note" id="monthlyProjectionNote" style="margin-top:9px;">목표를 저장하면 예상 달성 여부를 보여드립니다.</div>
+    </div>
+        </div>
     </div>
   </section>
 
