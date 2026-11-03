@@ -1635,6 +1635,69 @@
       .auth-panel #userArea:not([style*="display:none"]):not([style*="display: none"]){gap:10px!important}
       .auth-panel #userEmail{flex-basis:100%!important}
     }
+
+    /* Unified record workspace: neutral surfaces + crimson as sole action accent */
+    body:not(.dark-mode) #page-records .platform-input-card,
+    body:not(.dark-mode) #page-records .baemin-input-card,
+    body:not(.dark-mode) #page-records .coupang-input-card{
+      background:#fbfafb!important;border:1px solid #ded9dd!important;box-shadow:none!important
+    }
+    body:not(.dark-mode) #page-records .platform-input-card h3,
+    body:not(.dark-mode) #page-records .baemin-input-card h3,
+    body:not(.dark-mode) #page-records .coupang-input-card h3{
+      color:#29252c!important;border-bottom:2px solid #bf1e36!important
+    }
+    body:not(.dark-mode) #page-records .hours-picker button,
+    body:not(.dark-mode) #page-records .hours-adjust button,
+    body:not(.dark-mode) #page-records .date-step-btn,
+    body:not(.dark-mode) #page-records .calendar-toggle,
+    body:not(.dark-mode) #page-records .record-month-controls button,
+    body:not(.dark-mode) #page-records .tools button{
+      background:#f7f5f6!important;color:#3b3037!important;
+      border:1px solid #ded7db!important;box-shadow:none!important;
+      background-image:none!important
+    }
+    body:not(.dark-mode) #page-records .hours-picker button:hover,
+    body:not(.dark-mode) #page-records .hours-adjust button:hover,
+    body:not(.dark-mode) #page-records .date-step-btn:hover,
+    body:not(.dark-mode) #page-records .calendar-toggle:hover,
+    body:not(.dark-mode) #page-records .record-month-controls button:hover,
+    body:not(.dark-mode) #page-records .tools button:hover{
+      background:#fff!important;border-color:#bf1e36!important;color:#bf1e36!important
+    }
+    body:not(.dark-mode) #page-records .hours-picker button.active,
+    body:not(.dark-mode) #page-records .hours-picker button[aria-pressed="true"]{
+      background:#bf1e36!important;color:#fff!important;border-color:#bf1e36!important
+    }
+    body:not(.dark-mode) #page-records .btn,
+    body:not(.dark-mode) #page-records .btn:hover{
+      background:#bf1e36!important;color:#fff!important;border-color:#bf1e36!important;
+      background-image:none!important
+    }
+    body:not(.dark-mode) #page-records input,
+    body:not(.dark-mode) #page-records select{
+      background:#f7f7f8!important;border:1px solid #d6d4d8!important;color:#29252c!important
+    }
+    body:not(.dark-mode) #page-records .record-month-summary,
+    body:not(.dark-mode) #page-records .hours-selected,
+    body:not(.dark-mode) #page-records .selected-hours,
+    body:not(.dark-mode) #page-records .hours-value{color:#a91b32!important}
+    body:not(.dark-mode) .auth-panel{background:#fbfafb!important;color:#29252c!important;border-color:#ded9dd!important}
+    body:not(.dark-mode) .auth-panel #userEmail,
+    body:not(.dark-mode) .auth-panel .auth-status,
+    body:not(.dark-mode) .auth-panel .sync-status{color:#655d66!important}
+    body:not(.dark-mode) .auth-panel .logout-btn{
+      background:#f7f5f6!important;color:#4b3d45!important;border:1px solid #ded7db!important;box-shadow:none!important
+    }
+    body:not(.dark-mode) .auth-panel .logout-btn:hover{border-color:#bf1e36!important;color:#bf1e36!important}
+    body.dark-mode #page-records .baemin-input-card,
+    body.dark-mode #page-records .coupang-input-card{background:#1b2636!important;border-color:#364052!important}
+    body.dark-mode #page-records .baemin-input-card h3,
+    body.dark-mode #page-records .coupang-input-card h3{color:#f2eaf0!important;border-bottom-color:#c9445d!important}
+    body.dark-mode #page-records .csv-btn,
+    body.dark-mode #page-records .backup-btn,
+    body.dark-mode #page-records .restore-btn{background:#293346!important;color:#f1edf1!important;border:1px solid #485064!important;box-shadow:none!important}
+    body.dark-mode #page-records .hours-picker button.active{background:#bf1e36!important;color:#fff!important;border-color:#bf1e36!important}
   </style>
 </head>
 
