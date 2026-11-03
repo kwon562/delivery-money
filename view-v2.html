@@ -1250,6 +1250,22 @@
     /* Separate the four daily performance cards from the account panel */
     .app-main>.auth-panel{margin-top:30px!important}
     @media(max-width:850px){.app-main>.auth-panel{margin-top:24px!important}}
+
+    /* Keep financial figures horizontal and readable on narrow screens */
+    .app-page .analytics-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .app-page .analytics-grid .analytics-card{min-width:0;align-items:flex-start;justify-content:center}
+    .app-page .analytics-grid .analytics-card .label{word-break:keep-all;overflow-wrap:normal;line-height:1.5}
+    .app-page .analytics-grid .analytics-card .value{font-size:clamp(19px,2vw,25px);word-break:normal;overflow-wrap:normal;white-space:nowrap;letter-spacing:-.7px}
+    .app-page .chart-panel .analytics-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+    @media(max-width:600px){
+      .app-page .analytics-grid,.app-page .chart-panel .analytics-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px}
+      .app-page .analytics-grid .analytics-card{padding:17px 15px;min-height:104px}
+      .app-page .analytics-grid .analytics-card .value{font-size:clamp(17px,4.1vw,23px);letter-spacing:-.65px}
+      .app-page .analytics-grid .analytics-card .label{font-size:12px}
+    }
+    @media(min-width:601px) and (max-width:1100px){
+      .app-page .analytics-grid .analytics-card .value{font-size:clamp(19px,2.3vw,24px)}
+    }
   </style>
 </head>
 
