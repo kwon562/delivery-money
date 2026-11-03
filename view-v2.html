@@ -1752,6 +1752,8 @@
   // 9. 배달 기록 저장
   // ==================================
 
+  let editingRecordDate = null;
+
   async function saveRecord() {
 
     const date = document.getElementById("date").value;
@@ -1788,29 +1790,26 @@
       return;
     }
 
-    const total = baemin + coupang;
-    const net = total - expenses;
+    const index = records.findIndex(r => r.date === date);
+    const previous = index !== -1 ? records[index] : null;
+    const isEditing = editingRecordDate === date;
 
+    // 일반 저장은 기존 날짜에 누적하고, 명시적으로 '수정'을 누른 경우에만 교체합니다.
     const record = {
       date,
-      baemin,
-      baeminOrders,
-      coupang,
-      coupangOrders,
-      hours,
-      expenses,
-      total,
-      net,
-      orders: baeminOrders + coupangOrders
+      baemin: (isEditing ? 0 : Number(previous?.baemin || 0)) + baemin,
+      baeminOrders: (isEditing ? 0 : Number(previous?.baeminOrders || 0)) + baeminOrders,
+      coupang: (isEditing ? 0 : Number(previous?.coupang || 0)) + coupang,
+      coupangOrders: (isEditing ? 0 : Number(previous?.coupangOrders || 0)) + coupangOrders,
+      hours: (isEditing ? 0 : Number(previous?.hours || 0)) + hours,
+      expenses: (isEditing ? 0 : Math.max(0, Number(previous?.expenses || 0) - detailedExpenses)) + otherExpenses + detailedExpenses
     };
+    record.total = record.baemin + record.coupang;
+    record.net = record.total - record.expenses;
+    record.orders = record.baeminOrders + record.coupangOrders;
 
-    const index = records.findIndex(r => r.date === date);
-
-    if (index !== -1) {
-      records[index] = record;
-    } else {
-      records.push(record);
-    }
+    if (index !== -1) records[index] = record;
+    else records.push(record);
 
     updateLocalStorage();
 
@@ -1848,6 +1847,7 @@
 
     }
 
+    editingRecordDate = null;
     // 저장 완료 후 입력란만 초기화합니다. 선택 날짜와 저장된 기록은 유지합니다.
     ["baemin", "baeminOrders", "coupang", "coupangOrders", "expenses"].forEach(id => {
       document.getElementById(id).value = "";
@@ -1867,7 +1867,7 @@
     const selectedDate = document.getElementById("date").value;
     const selectedRecord = records.find(r => r.date === selectedDate);
     const itemTotal = expenseItems.filter(x => x.delivery_date === selectedDate).reduce((s,x) => s + Number(x.amount || 0), 0);
-    document.getElementById("expenses").value = selectedRecord ? Math.max(0, Number(selectedRecord.expenses || 0) - itemTotal) : "";
+    // 일반 입력에서는 기존 지출을 다시 채우지 않습니다. 중복 누적 방지.
 
 
     const date = document.getElementById("date").value;
@@ -2407,6 +2407,7 @@
     document.getElementById("coupangOrders").value = record.coupangOrders ?? 0;
     document.getElementById("hours").value = record.hours ?? 0;
     document.getElementById("expenses").value = Math.max(0, Number(record.expenses || 0) - detailed);
+    editingRecordDate = date;
     document.getElementById("date").closest(".panel").scrollIntoView({behavior:"smooth",block:"start"});
   }
 
@@ -2644,6 +2645,13 @@
     "change",
     updateDashboard
   );
+  document.getElementById("date").addEventListener("change", () => {
+    editingRecordDate = null;
+    ["baemin", "baeminOrders", "coupang", "coupangOrders", "expenses"].forEach(id => {
+      document.getElementById(id).value = "";
+    });
+    selectHours(0);
+  });
 
   // ==================================
   // 17. 로그인 상태 자동 확인
