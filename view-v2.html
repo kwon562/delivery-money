@@ -1814,6 +1814,31 @@
         padding:20px!important
       }
     }
+
+    /* One horizontal alignment grid shared by Home, Records, Analytics, Expenses and Account */
+    .app-main{--content-inset:20px!important;min-width:0!important}
+    .app-main>.app-page{box-sizing:border-box!important;padding:0 var(--content-inset) 24px!important;margin:0!important;width:100%!important}
+    .app-main>.app-page .page-intro{padding:0!important;margin-left:0!important;margin-right:0!important}
+    .app-main>#page-analytics{padding:0 var(--content-inset) 24px!important}
+    #page-analytics .analytics-period-tabs{padding:0!important;margin-left:0!important;margin-right:0!important}
+    #page-analytics .analytics-period-view>.section-title{margin-left:0!important;margin-right:0!important}
+    #page-analytics .analytics-period-view>.content-grid{margin:16px 0 0!important}
+    #page-analytics .analytics-period-view>.analytics-grid{margin:14px 0!important}
+    #page-analytics .analytics-period-charts{margin-left:0!important;margin-right:0!important}
+    .app-main>.auth-panel{
+      box-sizing:border-box!important;width:calc(100% - 2 * var(--content-inset))!important;
+      margin:32px var(--content-inset) 26px!important;padding:28px 30px!important
+    }
+    @media(max-width:850px){
+      .app-main{--content-inset:14px!important}
+      .app-main>.app-page,.app-main>#page-analytics{padding:0 var(--content-inset) 22px!important}
+      .app-main>.auth-panel{margin:26px var(--content-inset) 22px!important;padding:23px!important}
+    }
+    @media(max-width:480px){
+      .app-main{--content-inset:10px!important}
+      .app-main>.app-page,.app-main>#page-analytics{padding:0 var(--content-inset) 18px!important}
+      .app-main>.auth-panel{margin:22px var(--content-inset) 18px!important;padding:19px!important}
+    }
   </style>
 </head>
 
