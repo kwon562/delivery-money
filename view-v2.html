@@ -906,6 +906,27 @@
       .monthly-overview-stats{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:9px}.monthly-net-block strong{font-size:26px}
     }
 
+
+    /* 넓은 기록 입력 영역과 큰 날짜 선택 달력 */
+    .entry-panel{margin:18px 0 24px;padding:24px;max-width:none}
+    .entry-panel .section-title{margin-top:0}
+    .entry-panel label{display:block;margin-top:12px}
+    .date-picker-row{display:flex;gap:10px;align-items:stretch}
+    .date-picker-row input{flex:1;min-width:0;font-size:19px;min-height:56px}
+    .calendar-toggle{border:0;border-radius:10px;background:#137f60;color:white;padding:10px 18px;font-weight:700;cursor:pointer;min-height:52px}
+    .big-calendar{max-width:640px;margin:14px 0 18px;padding:18px;border:1px solid #dce8e2;border-radius:16px;background:#f9fcfa}
+    .big-calendar[hidden]{display:none}
+    .calendar-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}
+    .calendar-nav strong{font-size:20px}
+    .calendar-nav button{width:48px;height:48px;border:1px solid #d6e3dc;background:white;border-radius:10px;font-size:28px;cursor:pointer}
+    .calendar-weekdays,.calendar-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;text-align:center}
+    .calendar-weekdays{margin-bottom:6px;font-weight:700;color:#52645c}
+    .calendar-weekdays span{padding:8px 0}
+    .calendar-days button{aspect-ratio:1;min-height:43px;border:1px solid #e2e9e5;border-radius:10px;background:white;font-size:17px;cursor:pointer}
+    .calendar-days button.selected{background:#138565;color:white;border-color:#138565;font-weight:700}
+    .calendar-days button.today{box-shadow:inset 0 0 0 2px #138565}
+    .calendar-days button:focus-visible{outline:3px solid #78bda4;outline-offset:2px}
+    @media(max-width:600px){.entry-panel{padding:17px}.date-picker-row{flex-wrap:wrap}.date-picker-row input{width:100%;flex-basis:100%}.calendar-toggle{width:100%}.big-calendar{padding:10px}.calendar-days{gap:3px}.calendar-days button{min-height:38px;font-size:16px}.calendar-nav strong{font-size:18px}}
   </style>
 </head>
 
@@ -982,6 +1003,41 @@
     </div>
 
   </div>
+
+  <!-- 실적 바로 아래에서 배달 수입을 입력합니다. -->
+    <!-- 기록 입력 -->
+    <div class="panel entry-panel" id="recordEntryPanel">
+
+      <h2 class="section-title">오늘의 배달 기록</h2>
+
+      <label for="date">기록 날짜 선택</label>
+      <div class="date-picker-row"><input type="date" id="date"><button type="button" class="calendar-toggle" onclick="toggleBigCalendar()">달력 크게 보기</button></div>
+      <div class="big-calendar" id="bigCalendar" hidden><div class="calendar-nav"><button type="button" onclick="changeCalendarMonth(-1)" aria-label="이전 달">‹</button><strong id="calendarMonthTitle"></strong><button type="button" onclick="changeCalendarMonth(1)" aria-label="다음 달">›</button></div><div class="calendar-weekdays"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div><div class="calendar-days" id="calendarDays"></div></div>
+
+      <label>배민커넥트 수입 (원)</label>
+      <input type="number" id="baemin" placeholder="예: 65000" min="0">
+
+      <label>배민 배달 건수</label>
+      <input type="number" id="baeminOrders" placeholder="예: 15" min="0">
+
+      <label>쿠팡이츠 수입 (원)</label>
+      <input type="number" id="coupang" placeholder="예: 42000" min="0">
+
+      <label>쿠팡 배달 건수</label>
+      <input type="number" id="coupangOrders" placeholder="예: 10" min="0">
+
+      <label>오늘 운행 시간 (시간)</label>
+      <input type="number" id="hours" placeholder="예: 5" min="0" step="0.5">
+
+      <label>기타 지출 (원) · 상세 지출과 별도</label>
+      <input type="number" id="expenses" placeholder="예: 8000" min="0">
+
+      <button class="btn" onclick="saveRecord()">
+        오늘 기록 저장하기
+      </button>
+
+    </div>
+
 
   <!-- 이번 달 핵심 요약 -->
   <section class="monthly-overview" aria-label="이번 달 핵심 실적">
@@ -1070,38 +1126,6 @@
   </section>
 
   <div class="content-grid">
-
-    <!-- 기록 입력 -->
-    <div class="panel">
-
-      <h2 class="section-title">오늘의 배달 기록</h2>
-
-      <label>날짜</label>
-      <input type="date" id="date">
-
-      <label>배민커넥트 수입 (원)</label>
-      <input type="number" id="baemin" placeholder="예: 65000" min="0">
-
-      <label>배민 배달 건수</label>
-      <input type="number" id="baeminOrders" placeholder="예: 15" min="0">
-
-      <label>쿠팡이츠 수입 (원)</label>
-      <input type="number" id="coupang" placeholder="예: 42000" min="0">
-
-      <label>쿠팡 배달 건수</label>
-      <input type="number" id="coupangOrders" placeholder="예: 10" min="0">
-
-      <label>오늘 운행 시간 (시간)</label>
-      <input type="number" id="hours" placeholder="예: 5" min="0" step="0.5">
-
-      <label>기타 지출 (원) · 상세 지출과 별도</label>
-      <input type="number" id="expenses" placeholder="예: 8000" min="0">
-
-      <button class="btn" onclick="saveRecord()">
-        오늘 기록 저장하기
-      </button>
-
-    </div>
 
     <!-- 수익 분석 -->
     <div class="panel">
@@ -1201,6 +1225,51 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+
+
+  // 모바일에서도 날짜를 쉽게 고를 수 있는 넓은 달력
+  let calendarViewMonth = new Date();
+  function toggleBigCalendar() {
+    const panel = document.getElementById("bigCalendar");
+    panel.hidden = !panel.hidden;
+    if (!panel.hidden) {
+      const selected = document.getElementById("date").value;
+      calendarViewMonth = selected ? new Date(selected + "T12:00:00") : new Date();
+      renderBigCalendar();
+    }
+  }
+  function changeCalendarMonth(delta) {
+    calendarViewMonth = new Date(calendarViewMonth.getFullYear(), calendarViewMonth.getMonth() + delta, 1);
+    renderBigCalendar();
+  }
+  function renderBigCalendar() {
+    const year = calendarViewMonth.getFullYear();
+    const month = calendarViewMonth.getMonth();
+    document.getElementById("calendarMonthTitle").textContent = year + "년 " + (month + 1) + "월";
+    const grid = document.getElementById("calendarDays");
+    grid.replaceChildren();
+    const firstDay = new Date(year, month, 1).getDay();
+    const count = new Date(year, month + 1, 0).getDate();
+    const selected = document.getElementById("date").value;
+    const now = new Date().toLocaleDateString("sv-SE");
+    for (let i = 0; i < firstDay; i++) grid.appendChild(document.createElement("span"));
+    for (let day = 1; day <= count; day++) {
+      const value = year + "-" + String(month + 1).padStart(2,"0") + "-" + String(day).padStart(2,"0");
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = day;
+      button.setAttribute("aria-label",value);
+      if (value === selected) button.classList.add("selected");
+      if (value === now) button.classList.add("today");
+      button.onclick = () => {
+        const dateInput = document.getElementById("date");
+        dateInput.value = value;
+        dateInput.dispatchEvent(new Event("change", {bubbles:true}));
+        document.getElementById("bigCalendar").hidden = true;
+      };
+      grid.appendChild(button);
+    }
+  }
 
   // ==================================
   // 1. Supabase 연결
