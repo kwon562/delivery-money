@@ -927,6 +927,16 @@
     .calendar-days button.today{box-shadow:inset 0 0 0 2px #138565}
     .calendar-days button:focus-visible{outline:3px solid #78bda4;outline-offset:2px}
     @media(max-width:600px){.entry-panel{padding:17px}.date-picker-row{flex-wrap:wrap}.date-picker-row input{width:100%;flex-basis:100%}.calendar-toggle{width:100%}.big-calendar{padding:10px}.calendar-days{gap:3px}.calendar-days button{min-height:38px;font-size:16px}.calendar-nav strong{font-size:18px}}
+
+    .platform-input-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0 20px}
+    .platform-input-card{min-width:0;border-radius:14px;padding:17px;border:1px solid #e0e6e9;background:#f9fafb}
+    .platform-input-card h3{font-size:18px;font-weight:800;margin:0 0 14px;padding-bottom:10px;border-bottom:2px solid #dce6e3}
+    .baemin-input-card{background:#f0fbf7;border-color:#bce7d9}
+    .baemin-input-card h3{color:#087f63;border-color:#20b28d}
+    .coupang-input-card{background:#f4f7ff;border-color:#cbd8fa}
+    .coupang-input-card h3{color:#315fbd;border-color:#638be0}
+    .platform-input-card input{width:100%;min-width:0}
+    @media(max-width:420px){.platform-input-grid{gap:8px}.platform-input-card{padding:10px}.platform-input-card h3{font-size:15px}.platform-input-card label{font-size:12px}.platform-input-card input{font-size:15px;padding:11px 8px}}
   </style>
 </head>
 
@@ -1014,17 +1024,22 @@
       <div class="date-picker-row"><input type="date" id="date"><button type="button" class="calendar-toggle" onclick="toggleBigCalendar()">달력 크게 보기</button></div>
       <div class="big-calendar" id="bigCalendar" hidden><div class="calendar-nav"><button type="button" onclick="changeCalendarMonth(-1)" aria-label="이전 달">‹</button><strong id="calendarMonthTitle"></strong><button type="button" onclick="changeCalendarMonth(1)" aria-label="다음 달">›</button></div><div class="calendar-weekdays"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div><div class="calendar-days" id="calendarDays"></div></div>
 
-      <label>배민커넥트 수입 (원)</label>
-      <input type="number" id="baemin" placeholder="예: 65000" min="0">
-
-      <label>배민 배달 건수</label>
-      <input type="number" id="baeminOrders" placeholder="예: 15" min="0">
-
-      <label>쿠팡이츠 수입 (원)</label>
-      <input type="number" id="coupang" placeholder="예: 42000" min="0">
-
-      <label>쿠팡 배달 건수</label>
-      <input type="number" id="coupangOrders" placeholder="예: 10" min="0">
+      <div class="platform-input-grid">
+        <section class="platform-input-card baemin-input-card" aria-label="배민커넥트 입력">
+          <h3>배민커넥트</h3>
+          <label for="baemin">수입 (원)</label>
+          <input type="number" id="baemin" placeholder="예: 65000" min="0">
+          <label for="baeminOrders">배달 건수</label>
+          <input type="number" id="baeminOrders" placeholder="예: 15" min="0">
+        </section>
+        <section class="platform-input-card coupang-input-card" aria-label="쿠팡이츠 입력">
+          <h3>쿠팡이츠</h3>
+          <label for="coupang">수입 (원)</label>
+          <input type="number" id="coupang" placeholder="예: 42000" min="0">
+          <label for="coupangOrders">배달 건수</label>
+          <input type="number" id="coupangOrders" placeholder="예: 10" min="0">
+        </section>
+      </div>
 
       <label>오늘 운행 시간 (시간)</label>
       <input type="number" id="hours" placeholder="예: 5" min="0" step="0.5">
