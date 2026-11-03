@@ -1740,6 +1740,29 @@
     @media(max-width:540px){#page-home .dashboard{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
       #page-home .dashboard .card{padding:14px!important}
       #page-home .dashboard .card-value{font-size:18px!important}}
+
+    /* Remove leftover mint-green ornamental accents throughout the UI */
+    body:not(.dark-mode) .section-title::before,
+    body:not(.dark-mode) .app-page .section-title::before,
+    body:not(.dark-mode) .auth-panel .section-title::before{
+      background:#bf1e36!important;background-image:none!important;box-shadow:none!important
+    }
+    body.dark-mode .section-title::before{background:#e04762!important;background-image:none!important;box-shadow:none!important}
+    body:not(.dark-mode) .dashboard .card::after,
+    body:not(.dark-mode) .app-page .card::after{
+      background:rgba(191,30,54,.045)!important
+    }
+    body.dark-mode .dashboard .card::after{background:rgba(224,71,98,.07)!important}
+    .live-dot,body:not(.dark-mode) .live-dot{background:#bf1e36!important;box-shadow:none!important}
+    body.dark-mode .live-dot{background:#e04762!important;box-shadow:none!important}
+    body:not(.dark-mode) .monthly-overview::after{border-color:rgba(191,30,54,.09)!important;
+      box-shadow:0 0 0 28px rgba(191,30,54,.02),0 0 0 58px rgba(191,30,54,.015)!important}
+    body:not(.dark-mode) .monthly-overview .eyebrow,
+    body:not(.dark-mode) .page-intro .eyebrow{color:#bf1e36!important}
+    body:not(.dark-mode) .monthly-overview-chip{background:#fae9ed!important;color:#a51a30!important;border-color:#f0cbd3!important}
+    body:not(.dark-mode) .monthly-overview .overview-progress-track>div,
+    body:not(.dark-mode) .weekday-fill{background:#bf1e36!important;background-image:none!important}
+    body:not(.dark-mode) .record-month-summary{color:#725760!important}
   </style>
 </head>
 
