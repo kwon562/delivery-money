@@ -1429,10 +1429,53 @@
     @media(max-width:850px){
       body:not(.dark-mode) .app-sidebar{background:#182b40!important;border-color:#182b40!important}
     }
+
+    /* BRAND REFRESH: crimson red, charcoal and soft neutral — no green accents */
+    :root{--dm-green:#bf1e36;--dm-green-dark:#a4162c;--dm-accent:#bf1e36}
+    body:not(.dark-mode){background:#f1f0f1!important;color:#25232a!important}
+    body:not(.dark-mode) .app-sidebar{background:#29242b!important;border-color:#29242b!important}
+    body:not(.dark-mode) .app-brand{color:#fff!important}
+    body:not(.dark-mode) .app-brand span{color:#f5a6b3!important}
+    body:not(.dark-mode) .app-nav-btn.active{background:#582632!important;color:#fff!important;border-color:#a64154!important}
+    body:not(.dark-mode) .app-page .monthly-overview,body:not(.dark-mode) .app-page .card,
+    body:not(.dark-mode) .app-page .analytics-card,body:not(.dark-mode) .app-page .chart-panel,
+    body:not(.dark-mode) .app-page .panel,body:not(.dark-mode) .app-page .history,
+    body:not(.dark-mode) .app-page .expense-panel,body:not(.dark-mode) .app-page .platform-input-card,
+    body:not(.dark-mode) .auth-panel{background:#fbfafb!important;border-color:#ded9dd!important}
+    body:not(.dark-mode) .app-page .green,body:not(.dark-mode) .app-page .monthly-net-block strong,
+    body:not(.dark-mode) .app-page .page-intro .eyebrow,
+    body:not(.dark-mode) .app-page .monthly-overview .eyebrow{color:#b91d36!important}
+    body:not(.dark-mode) .app-page .btn,body:not(.dark-mode) .app-page .expense-add,
+    body:not(.dark-mode) .app-page .calendar-toggle,
+    body:not(.dark-mode) .signup-btn{background:#bf1e36!important;color:#fff!important;border-color:#bf1e36!important}
+    body:not(.dark-mode) .app-page .btn:hover,body:not(.dark-mode) .app-page .expense-add:hover,
+    body:not(.dark-mode) .signup-btn:hover{background:#9f182e!important}
+    body:not(.dark-mode) .login-btn{background:#fff!important;color:#4d4147!important;border:2px solid #dcd7db!important}
+    body:not(.dark-mode) .theme-toggle{background:#f8e9ed!important;color:#a51931!important;border-color:#e6c5ce!important}
+    body:not(.dark-mode) .monthly-overview-chip{background:#f9e7ec!important;color:#a91a33!important}
+    body:not(.dark-mode) .app-page .overview-progress-track,body:not(.dark-mode) .app-page .bar-track{background:#e9e3e7!important}
+    body:not(.dark-mode) .app-page .overview-progress-track>div,
+    body:not(.dark-mode) .app-page .weekday-fill,
+    body:not(.dark-mode) .app-page .bar-fill{background:#bf1e36!important}
+    body:not(.dark-mode) .app-page .bar-fill.coupang{background:#e17d91!important}
+    body:not(.dark-mode) .app-page .section-title:before,
+    body:not(.dark-mode) .app-page .section-title::before{background:#bf1e36!important}
+    body:not(.dark-mode) .app-page input:focus,body:not(.dark-mode) .app-page select:focus{outline-color:#c33c54!important;border-color:#c33c54!important}
+    body.dark-mode .app-nav-btn.active{background:#512431!important;border-color:#a64a5c!important;color:#ffd7df!important;box-shadow:inset 3px 0 0 #df4d66!important}
+    body.dark-mode .app-brand span,body.dark-mode .page-intro .eyebrow,
+    body.dark-mode .monthly-overview .eyebrow,body.dark-mode .green,
+    body.dark-mode .monthly-net-block strong{color:#ff738c!important}
+    body.dark-mode .app-page .btn,body.dark-mode .app-page .expense-add,
+    body.dark-mode .signup-btn,body.dark-mode .calendar-toggle{background:#bf1e36!important;color:white!important}
+    body.dark-mode .app-page .overview-progress-track>div,body.dark-mode .app-page .weekday-fill,
+    body.dark-mode .app-page .bar-fill{background:#e04762!important}
+    body.dark-mode .app-page .bar-fill.coupang{background:#ac728a!important}
+    body.dark-mode .app-page .section-title::before{background:#e04762!important}
+    body.dark-mode .monthly-overview-chip{background:#49232f!important;color:#ffb4c3!important;border-color:#783b4d!important}
   </style>
 </head>
 
-<body class="dark-mode">
+<body>
 
 <div class="container app-shell"><aside class="app-sidebar" aria-label="주 메뉴"><div class="app-brand"><span>DELIVERY MONEY</span>배달머니</div><nav class="app-nav" aria-label="화면 이동"><button type="button" class="app-nav-btn active" data-page="home" onclick="switchAppPage('home')"><span class="nav-icon">⌂</span>홈</button><button type="button" class="app-nav-btn" data-page="records" onclick="switchAppPage('records')"><span class="nav-icon">✎</span>기록</button><button type="button" class="app-nav-btn" data-page="analytics" onclick="switchAppPage('analytics')"><span class="nav-icon">▥</span>분석</button><button type="button" class="app-nav-btn" data-page="expenses" onclick="switchAppPage('expenses')"><span class="nav-icon">▤</span>지출</button></nav><div class="app-sidebar-foot">수입부터 지출까지<br>한곳에서 간편하게 관리하세요.</div></aside><div class="app-main">  <header>
     <div>
@@ -1790,7 +1833,7 @@
     localStorage.setItem("deliveryMoneyTheme", next);
     applyTheme(next);
   }
-  applyTheme(localStorage.getItem("deliveryMoneyTheme") || "dark");
+  applyTheme(localStorage.getItem("deliveryMoneyTheme") || "light");
 
   // 모바일에서도 날짜를 쉽게 고를 수 있는 넓은 달력
   let calendarViewMonth = new Date();
