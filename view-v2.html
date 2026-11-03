@@ -1266,6 +1266,38 @@
     @media(min-width:601px) and (max-width:1100px){
       .app-page .analytics-grid .analytics-card .value{font-size:clamp(19px,2.3vw,24px)}
     }
+
+    /* Analytics cards must have actual width, not merely no-wrap text */
+    .app-page .analytics-compact-grid .chart-panel .analytics-grid{
+      display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:12px!important;
+    }
+    .app-page .analytics-compact-grid .chart-panel .analytics-card{
+      width:100%;min-width:0;min-height:92px;padding:17px 20px!important;overflow:visible;
+    }
+    .app-page .analytics-compact-grid .chart-panel .analytics-card .value{
+      display:block;width:100%;font-size:clamp(20px,2.4vw,27px)!important;
+      white-space:nowrap!important;word-break:keep-all!important;overflow-wrap:normal!important;
+      line-height:1.35!important;letter-spacing:-.7px;
+    }
+    .app-page .analytics-compact-grid .chart-panel .analytics-card .label{
+      white-space:normal;word-break:keep-all;overflow-wrap:break-word;
+    }
+    @media(max-width:700px){
+      .app-page .analytics-compact-grid .chart-panel .analytics-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr))!important;
+      }
+      .app-page .analytics-compact-grid .chart-panel .analytics-card{
+        padding:15px 13px!important;min-height:100px;
+      }
+      .app-page .analytics-compact-grid .chart-panel .analytics-card .value{
+        font-size:clamp(16px,4vw,22px)!important;letter-spacing:-.85px;
+      }
+    }
+    @media(max-width:390px){
+      .app-page .analytics-compact-grid .chart-panel .analytics-grid{
+        grid-template-columns:minmax(0,1fr)!important;
+      }
+    }
   </style>
 </head>
 
